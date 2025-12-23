@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/mypro/Downloads/ying-ge/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>期刊查询系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 400;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #5a6c7d;
+            font-weight: 400;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: 12px;
+            padding: 45px 35px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            border: 1px solid #eaeaea;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #74b9ff;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .module-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .module-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .module-title {
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+
+        .module-description {
+            color: #5a6c7d;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .module-features {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .module-features li {
+            padding: 6px 0;
+            color: #6c7a89;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            font-weight: 400;
+        }
+
+        .module-features li::before {
+            content: '·';
+            color: #74b9ff;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.4rem;
+        }
+
+        .module-2 .module-icon {
+            color: #a29bfe;
+        }
+
+        .module-2::before {
+            background: #a29bfe;
+        }
+
+        .stats-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #eaeaea;
+        }
+
+        .stat-item {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 5px;
+            color: #74b9ff;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #5a6c7d;
+            font-weight: 400;
+        }
+
+        .footer {
+            text-align: center;
+            color: #5a6c7d;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        @media (max-width: 900px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .module-card {
+                padding: 35px 30px;
+            }
+
+            .module-title {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .module-card {
+                padding: 30px 20px;
+            }
+
+            .module-icon {
+                font-size: 3rem;
+            }
+
+            .module-title {
+                font-size: 1.4rem;
+            }
+
+            .module-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>期刊查询系统</h1>
+            <p>基于中科院JCR分区与卓越行动计划的期刊评价目录查询工具</p>
+        </div>
+
+        <div class="modules-grid">
+            <a href="natural-science-journals.html" class="module-card module-1">
+                <span class="module-icon">🔬</span>
+                <h2 class="module-title">自然科学类期刊查询</h2>
+                <p class="module-description">
+                    查询自然科学类期刊的SCI分区水平，包括顶级期刊、Q1区、Q2区、Q3区等多个等级，涵盖物理、化学、生物、工程技术等领域
+                </p>
+                <ul class="module-features">
+                    <li>支持模糊搜索，输入部分关键词即可</li>
+                    <li>涵盖9个不同水平分类</li>
+                    <li>包含8,464种期刊数据</li>
+                    <li>点击图例可查看分类期刊列表</li>
+                </ul>
+            </a>
+
+            <a href="social-science-journals.html" class="module-card module-2">
+                <span class="module-icon">📚</span>
+                <h2 class="module-title">人文社科类期刊查询</h2>
+                <p class="module-description">
+                    查询人文社科类期刊的SSCI分区水平（Q1-Q4区），涵盖社会科学、艺术人文、经济管理等领域
+                </p>
+                <ul class="module-features">
+                    <li>支持模糊搜索，输入部分关键词即可</li>
+                    <li>涵盖7个SSCI分区等级</li>
+                    <li>包含3,523种期刊数据</li>
+                    <li>点击图例可查看分类期刊列表</li>
+                </ul>
+            </a>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value">11,987</div>
+                <div class="stat-label">期刊总数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">8,464</div>
+                <div class="stat-label">自然科学类</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">3,523</div>
+                <div class="stat-label">人文社科类</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">2</div>
+                <div class="stat-label">查询模块</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>数据来源：中科院JCR分区、中国科技期刊卓越行动计划</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">
+                💡 提示：如果无法加载数据，请确保使用 HTTP 服务器访问（运行 <code style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">python3 -m http.server 8000</code>）
+            </p>
+        </div>
+    </div>
+
+    <script src="journals.js"></script>
+    <script>
+        function loadStats() {
+            if (typeof journalsData !== 'undefined') {
+                const total = Object.values(journalsData).reduce((sum, journals) => sum + journals.length, 0);
+                document.getElementById('totalJournals').textContent = total.toLocaleString();
+            }
+        }
+
+        // DOM 加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadStats);
+        } else {
+            loadStats();
+        }
+    </script>
+</body>
+</html>

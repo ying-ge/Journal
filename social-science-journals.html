@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>期刊水平查询 - 模块一</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 400;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #5a6c7d;
+            font-weight: 400;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            border: 1px solid #eaeaea;
+        }
+
+        .back-link:hover {
+            background: #74b9ff;
+            color: white;
+            border-color: #74b9ff;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+            border: 1px solid #eaeaea;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            outline: none;
+            background: #fafafa;
+        }
+
+        .search-input:focus {
+            border-color: #74b9ff;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(116, 185, 255, 0.1);
+        }
+
+        .search-tips {
+            margin-top: 12px;
+            color: #6c7a89;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        .results {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: none;
+            border: 1px solid #eaeaea;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .result-item {
+            padding: 18px;
+            border-left: 3px solid #74b9ff;
+            background: #f8f9fa;
+            margin-bottom: 12px;
+            border-radius: 6px;
+        }
+
+        .result-item.no-results {
+            border-left-color: #fab1a0;
+            background: #fff5f2;
+        }
+
+        .journal-name {
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .journal-level {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #74b9ff;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        .journal-note {
+            margin-top: 8px;
+            color: #5a6c7d;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        .level-legend {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-top: 30px;
+            border: 1px solid #eaeaea;
+        }
+
+        .level-legend h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-weight: 400;
+            font-size: 1.1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .legend-item:hover {
+            background: #e9ecef;
+            transform: translateX(3px);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+
+        .close-btn {
+            padding: 6px 16px;
+            background: #74b9ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #5a9fd8;
+        }
+
+        .legend-badge {
+            padding: 4px 10px;
+            background: #74b9ff;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 12px;
+            white-space: nowrap;
+            font-weight: 400;
+        }
+
+        .legend-desc {
+            color: #5a6c7d;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #5a6c7d;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .search-box, .results {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← 返回首页</a>
+
+        <div class="header">
+            <h1>人文社科类期刊查询</h1>
+            <p>输入期刊名称，查询其所属SSCI分区水平（Q1-Q4区）</p>
+        </div>
+
+        <div class="search-box">
+            <input
+                type="text"
+                class="search-input"
+                id="searchInput"
+                placeholder="请输入期刊名称（支持英文和中文，不区分大小写）"
+                autocomplete="off"
+            >
+            <div class="search-tips">
+                💡 提示：输入完整或部分期刊名称即可，系统会自动匹配
+            </div>
+        </div>
+
+        <div class="results" id="results"></div>
+
+                <div class="level-legend">
+            <h3>📊 SSCI分区说明 <small style="font-size: 0.8rem; color: #5a6c7d; font-weight: 400;">（点击分类查看期刊列表）</small></h3>
+            <div class="legend-item" data-category="SSCIQ1区A类期刊评价目录">
+                <span class="legend-badge">SSCIQ1区A类</span>
+                <span class="legend-desc">SSCI Q1区A类期刊评价目录</span>
+            </div>
+            <div class="legend-item" data-category="SSCIQ1区B类期刊评价目录">
+                <span class="legend-badge">SSCIQ1区B类</span>
+                <span class="legend-desc">SSCI Q1区B类期刊评价目录</span>
+            </div>
+            <div class="legend-item" data-category="SSCIQ1区C类期刊评价目录">
+                <span class="legend-badge">SSCIQ1区C类</span>
+                <span class="legend-desc">SSCI Q1区C类期刊评价目录</span>
+            </div>
+            <div class="legend-item" data-category="SSCIQ1区D类期刊评价目录">
+                <span class="legend-badge">SSCIQ1区D类</span>
+                <span class="legend-desc">SSCI Q1区D类期刊评价目录</span>
+            </div>
+            <div class="legend-item" data-category="SSCIQ2区期刊评价目录">
+                <span class="legend-badge">SSCIQ2区</span>
+                <span class="legend-desc">SSCI Q2区期刊评价目录</span>
+            </div>
+            <div class="legend-item" data-category="SSCIQ3区期刊评价目录">
+                <span class="legend-badge">SSCIQ3区</span>
+                <span class="legend-desc">SSCI Q3区期刊评价目录</span>
+            </div>
+            <div class="legend-item" data-category="SSCIQ4区期刊评价目录">
+                <span class="legend-badge">SSCIQ4区</span>
+                <span class="legend-desc">SSCI Q4区期刊评价目录</span>
+            </div>
+        </div>
+        </div>
+    <script src="art-journals.js"></script>
+    <script>
+        let dataLoaded = false;
+                const levelMap = {
+            'SSCIQ1区A类期刊评价目录': 'SSCIQ1区A类',
+            'SSCIQ1区B类期刊评价目录': 'SSCIQ1区B类',
+            'SSCIQ1区C类期刊评价目录': 'SSCIQ1区C类',
+            'SSCIQ1区D类期刊评价目录': 'SSCIQ1区D类',
+            'SSCIQ2区期刊评价目录': 'SSCIQ2区',
+            'SSCIQ3区期刊评价目录': 'SSCIQ3区',
+            'SSCIQ4区期刊评价目录': 'SSCIQ4区',
+        };
+
+        function loadJournals() {
+            try {
+                // 数据已经通过 <script> 标签加载
+                if (typeof artJournalsData !== 'undefined') {
+                    dataLoaded = true;
+                    console.log('Journals data loaded successfully. Categories:', Object.keys(artJournalsData).length);
+
+                    // 如果搜索框有内容，重新执行搜索
+                    const searchInput = document.getElementById('searchInput');
+                    if (searchInput && searchInput.value.trim()) {
+                        performSearch(searchInput.value);
+                    }
+                } else {
+                    throw new Error('artJournalsData is not defined');
+                }
+            } catch (error) {
+                console.error('Failed to load journals data:', error);
+                const resultsDiv = document.getElementById('results');
+                if (resultsDiv) {
+                    resultsDiv.innerHTML = `
+                        <div class="result-item no-results">
+                            <div class="journal-name">数据加载失败</div>
+                            <p style="color: #666;">无法加载期刊数据，请确保 art-journals.js 文件存在</p>
+                        </div>
+                    `;
+                    resultsDiv.classList.add('show');
+                }
+            }
+        }
+
+        function searchJournals(query) {
+            if (!query || query.trim() === '') {
+                return [];
+            }
+
+            const results = [];
+            const searchTerms = query.toLowerCase().trim();
+
+            console.log('Searching for:', searchTerms);
+            console.log('Data loaded:', dataLoaded);
+            console.log('Categories in data:', Object.keys(artJournalsData).length);
+
+            for (const [category, journals] of Object.entries(artJournalsData)) {
+                for (const journal of journals) {
+                    const journalName = journal.name.toLowerCase();
+                    if (journalName.includes(searchTerms)) {
+                        results.push({
+                            name: journal.name,
+                            level: levelMap[category] || category,
+                            note: journal.note || '',
+                            originalCategory: category
+                        });
+                    }
+                }
+            }
+
+            console.log('Found results:', results.length);
+            return results.sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+
+            if (results.length === 0) {
+                resultsDiv.innerHTML = `
+                    <div class="result-item no-results">
+                        <div class="journal-name">未找到匹配的期刊</div>
+                        <p style="color: #666;">请检查期刊名称拼写，或尝试使用更短的关键词搜索</p>
+                    </div>
+                `;
+                resultsDiv.classList.add('show');
+                return;
+            }
+
+            let html = '';
+            results.forEach(result => {
+                let noteHtml = result.note ? `<div class="journal-note">📝 ${result.note}</div>` : '';
+                html += `
+                    <div class="result-item">
+                        <div class="journal-name">${result.name}</div>
+                        <div>
+                            <span class="journal-level">${result.level}</span>
+                        </div>
+                        ${noteHtml}
+                    </div>
+                `;
+            });
+
+            resultsDiv.innerHTML = html;
+            resultsDiv.classList.add('show');
+        }
+
+        function performSearch(query) {
+            if (!dataLoaded) {
+                console.log('Data not loaded yet, skipping search');
+                return;
+            }
+            const results = searchJournals(query);
+            displayResults(results);
+        }
+
+        function showCategory(categoryName) {
+            if (!dataLoaded) {
+                console.log('Data not loaded yet');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('results');
+            const levelDisplayName = levelMap[categoryName] || categoryName;
+
+            // 如果已经在显示该分类，则关闭
+            if (resultsDiv.classList.contains('show') && resultsDiv.dataset.currentCategory === categoryName) {
+                resultsDiv.classList.remove('show');
+                resultsDiv.dataset.currentCategory = '';
+                return;
+            }
+
+            if (!artJournalsData[categoryName]) {
+                resultsDiv.innerHTML = `
+                    <div class="result-item no-results">
+                        <div class="journal-name">未找到分类</div>
+                        <p style="color: #666;">分类：${categoryName}</p>
+                    </div>
+                `;
+                resultsDiv.classList.add('show');
+                resultsDiv.dataset.currentCategory = categoryName;
+                return;
+            }
+
+            const journals = artJournalsData[categoryName];
+            let html = `
+                <div class="results-header">
+                    <span style="font-weight: 500; color: #2c3e50;">${levelDisplayName} - ${journals.length} 种期刊</span>
+                    <button class="close-btn" onclick="closeResults()">✕ 关闭</button>
+                </div>
+            `;
+
+            // 显示前100个期刊，避免页面过长
+            const displayJournals = journals.slice(0, 100);
+
+            displayJournals.forEach(journal => {
+                html += `
+                    <div class="result-item">
+                        <div class="journal-name">${journal.name}</div>
+                        <div>
+                            <span class="journal-level">${levelDisplayName}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (journals.length > 100) {
+                html += `
+                    <div style="text-align: center; padding: 20px; color: #5a6c7d;">
+                        <p>该分类共有 <strong>${journals.length}</strong> 种期刊，此处显示前 100 种</p>
+                    </div>
+                `;
+            }
+
+            resultsDiv.innerHTML = html;
+            resultsDiv.classList.add('show');
+            resultsDiv.dataset.currentCategory = categoryName;
+
+            // 滚动到结果区域
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function closeResults() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.classList.remove('show');
+            resultsDiv.dataset.currentCategory = '';
+        }
+
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const query = e.target.value;
+                performSearch(query);
+            }, 300);
+        });
+
+        // 添加图例点击事件
+        document.querySelectorAll('.legend-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const category = item.dataset.category;
+                if (category) {
+                    showCategory(category);
+                }
+            });
+        });
+
+        // DOM 加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadJournals);
+        } else {
+            loadJournals();
+        }
+    </script>
+</body>
+</html>
