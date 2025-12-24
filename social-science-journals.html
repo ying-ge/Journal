@@ -248,11 +248,11 @@
                 type="text"
                 class="search-input"
                 id="searchInput"
-                placeholder="请输入期刊名称（支持英文和中文，不区分大小写）"
+                placeholder="请输入期刊名称或首字母缩写（如 ASR, AJSP 等）"
                 autocomplete="off"
             >
             <div class="search-tips">
-                💡 提示：输入完整或部分期刊名称即可，系统会自动匹配
+                💡 提示：支持期刊名称搜索和首字母缩写搜索（如 ASR 查找 American Sociological Review）
             </div>
         </div>
 
@@ -333,6 +333,34 @@
             }
         }
 
+        function extractAbbreviation(text) {
+            // 提取首字母缩写（忽略常见介词和连词）
+            const skipWords = ['of', 'the', 'and', 'in', 'on', 'at', 'for', 'with', 'de', 'et', 'des', 'la', 'le'];
+            const words = text.split(/[\s-]+/);
+            return words
+                .filter(word => word.length > 0 && !skipWords.includes(word.toLowerCase()))
+                .map(word => word.charAt(0).toUpperCase())
+                .join('');
+        }
+
+        function matchesAbbreviation(journalName, searchQuery) {
+            // 检查是否匹配首字母缩写
+            const abbreviation = extractAbbreviation(journalName);
+            const searchUpper = searchQuery.toUpperCase();
+
+            // 完全匹配缩写
+            if (abbreviation === searchUpper) {
+                return true;
+            }
+
+            // 缩写包含搜索词
+            if (abbreviation.includes(searchUpper)) {
+                return true;
+            }
+
+            return false;
+        }
+
         function searchJournals(query) {
             if (!query || query.trim() === '') {
                 return [];
@@ -348,7 +376,21 @@
             for (const [category, journals] of Object.entries(artJournalsData)) {
                 for (const journal of journals) {
                     const journalName = journal.name.toLowerCase();
+                    let matched = false;
+
+                    // 原有的子字符串匹配
                     if (journalName.includes(searchTerms)) {
+                        matched = true;
+                    }
+
+                    // 首字母缩写匹配
+                    if (!matched && searchTerms.length >= 2 && /^[a-zA-Z]+$/.test(searchTerms)) {
+                        if (matchesAbbreviation(journal.name, searchTerms)) {
+                            matched = true;
+                        }
+                    }
+
+                    if (matched) {
                         results.push({
                             name: journal.name,
                             level: levelMap[category] || category,
