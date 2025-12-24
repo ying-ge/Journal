@@ -431,6 +431,46 @@
             return false;
         }
 
+        function calculateMatchScore(journalName, searchTerms) {
+            let score = 0;
+            const journalLower = journalName.toLowerCase();
+
+            // 1. 完全匹配（最高分）
+            if (journalLower === searchTerms) {
+                score += 1000;
+            }
+
+            // 2. 三字母前缀完全匹配（高分）
+            const threeLetterPattern = extractThreeLetterPrefix(journalName);
+            if (threeLetterPattern === searchTerms) {
+                score += 500;
+                console.log('  Score +500: Three letter exact match');
+            }
+
+            // 3. 首字母缩写完全匹配（高分）
+            const abbreviation = extractAbbreviation(journalName);
+            if (abbreviation === searchTerms.toUpperCase()) {
+                score += 400;
+                console.log('  Score +400: Abbreviation exact match');
+            }
+
+            // 4. 期刊名以搜索词开头（中等分）
+            if (journalLower.startsWith(searchTerms)) {
+                score += 200;
+            }
+
+            // 5. 期刊名包含搜索词（低分）
+            if (journalLower.includes(searchTerms)) {
+                score += 100;
+            }
+
+            // 6. 匹配度打分（基于匹配的字符数比例）
+            const matchRatio = searchTerms.split('').filter(char => journalLower.includes(char)).length / searchTerms.length;
+            score += Math.round(matchRatio * 50);
+
+            return score;
+        }
+
         function searchJournals(query) {
             if (!query || query.trim() === '') {
                 return [];
@@ -468,18 +508,26 @@
                     }
 
                     if (matched) {
+                        const score = calculateMatchScore(journal.name, searchTerms);
                         results.push({
                             name: journal.name,
                             level: levelMap[category] || category,
                             note: journal.note || '',
-                            originalCategory: category
+                            originalCategory: category,
+                            score: score  // 添加评分
                         });
                     }
                 }
             }
 
             console.log('Found results:', results.length);
-            return results.sort((a, b) => a.name.localeCompare(b.name));
+            // 按评分降序排序，然后按名称排序
+            return results.sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score;  // 评分高的在前
+                }
+                return a.name.localeCompare(b.name);
+            });
         }
 
         function displayResults(results) {
