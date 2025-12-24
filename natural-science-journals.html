@@ -267,7 +267,7 @@
                 autocomplete="off"
             >
             <div class="search-tips">
-                💡 提示：输入完整或部分期刊名称即可，系统会自动匹配
+                💡 提示：支持期刊名称、首字母缩写（如 JACS）、缩写片段（如 "mol can" 搜 "Molecular Cancer"）、前缀等多种搜索方式，系统会自动匹配
             </div>
         </div>
 
@@ -357,6 +357,60 @@
             }
         }
 
+        // 提取期刊名称的首字母缩写
+        function extractAcronym(journalName) {
+            // 移除常见的停用词（这些词通常不包含在缩写中）
+            const stopWords = new Set(['of', 'the', 'in', 'and', 'for', 'with', 'on', 'at', 'from', 'to', 'an', 'a', 'by']);
+
+            // 分割期刊名称为单词，处理连字符和空格
+            const words = journalName
+                .toLowerCase()
+                .replace(/[-–—]/g, ' ')  // 将各种连字符替换为空格
+                .split(/\s+/)
+                .filter(word => word.length > 0 && !stopWords.has(word));
+
+            // 提取每个单词的首字母
+            const acronym = words.map(word => word.charAt(0)).join('');
+
+            return acronym;
+        }
+
+        // 检查搜索词是否匹配缩写片段（支持 "mol can" 匹配 "molecular cancer"）
+        function matchesAcronymFragment(searchTerm, acronym, journalName) {
+            // 如果搜索词包含空格，说明是多个首字母片段（如 "mol can"）
+            if (searchTerm.includes(' ')) {
+                const searchFragments = searchTerm.toLowerCase().split(/\s+/).filter(f => f.length > 0);
+
+                // 检查每个片段是否对应期刊名中的单词首字母
+                const words = journalName
+                    .toLowerCase()
+                    .replace(/[-–—]/g, ' ')
+                    .split(/\s+/)
+                    .filter(word => word.length > 0);
+
+                // 为每个搜索片段找到匹配的单词
+                let matchedIndices = new Set();
+                for (const fragment of searchFragments) {
+                    let found = false;
+                    for (let i = 0; i < words.length; i++) {
+                        if (matchedIndices.has(i)) continue; // 跳过已匹配的单词
+
+                        // 检查单词是否以该片段开头
+                        if (words[i].startsWith(fragment)) {
+                            matchedIndices.add(i);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) return false; // 没找到匹配
+                }
+                return true;
+            }
+
+            // 单个搜索词：检查是否是完整缩写的子串
+            return acronym.includes(searchTerm);
+        }
+
         function searchJournals(query) {
             if (!query || query.trim() === '') {
                 return [];
@@ -372,19 +426,60 @@
             for (const [category, journals] of Object.entries(journalsData)) {
                 for (const journal of journals) {
                     const journalName = journal.name.toLowerCase();
-                    if (journalName.includes(searchTerms)) {
+                    let score = 0;
+                    let matchType = '';
+
+                    // 1. 精确匹配（完全相等）
+                    if (journalName === searchTerms) {
+                        score = 100;
+                        matchType = 'exact';
+                    }
+                    // 2. 包含匹配（期刊名包含搜索词）
+                    else if (journalName.includes(searchTerms)) {
+                        score = 50 + (searchTerms.length / journalName.length) * 10;
+                        matchType = 'contains';
+                    }
+
+                    // 3. 缩写匹配（提取期刊名首字母）
+                    const acronym = extractAcronym(journal.name);
+                    if (acronym === searchTerms) {
+                        score = Math.max(score, 80); // 缩写精确匹配
+                        matchType = 'acronym_exact';
+                    } else if (matchesAcronymFragment(searchTerms, acronym, journal.name)) {
+                        // 支持缩写片段匹配（如 "mol can" 匹配 "molecular cancer"）
+                        const fragmentScore = searchTerms.includes(' ') ? 70 : 40; // 多个片段给更高分
+                        score = Math.max(score, fragmentScore);
+                        matchType = searchTerms.includes(' ') ? 'acronym_fragment' : 'acronym_partial';
+                    }
+
+                    // 4. 三字母前缀匹配
+                    if (searchTerms.length >= 3 && journalName.startsWith(searchTerms)) {
+                        score = Math.max(score, 60);
+                        matchType = 'prefix';
+                    }
+
+                    if (score > 0) {
                         results.push({
                             name: journal.name,
                             level: levelMap[category] || category,
                             note: journal.note || '',
-                            originalCategory: category
+                            originalCategory: category,
+                            score: score,
+                            matchType: matchType,
+                            acronym: acronym
                         });
                     }
                 }
             }
 
             console.log('Found results:', results.length);
-            return results.sort((a, b) => a.name.localeCompare(b.name));
+            // 按分数降序排序，分数相同按名称排序
+            return results.sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score;
+                }
+                return a.name.localeCompare(b.name);
+            });
         }
 
         function displayResults(results) {
@@ -404,6 +499,11 @@
             let html = '';
             results.forEach(result => {
                 let extraInfo = '';
+
+                // 添加缩写提示（如果是通过缩写匹配找到的）
+                if (result.acronym && result.matchType && result.matchType.includes('acronym')) {
+                    extraInfo += `<div class="journal-info">🔤 缩写：${result.acronym.toUpperCase()}</div>`;
+                }
 
                 // 添加备注
                 if (result.note) {

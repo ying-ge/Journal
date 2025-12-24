@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>缩写搜索测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        h1 { color: #333; }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 3px;
+        }
+        .success { background: #d4edda; }
+        .error { background: #f8d7da; }
+        input {
+            width: 70%;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>期刊缩写搜索功能测试</h1>
+
+    <div class="test-section">
+        <h2>手动测试</h2>
+        <input type="text" id="searchInput" placeholder="输入缩写（如 jacs）或期刊名称">
+        <button onclick="testSearch()">搜索</button>
+        <div id="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>自动化测试用例</h2>
+        <div id="autoTests"></div>
+    </div>
+
+    <script src="journals.js"></script>
+    <script>
+        const stopWords = new Set(['of', 'the', 'in', 'and', 'for', 'with', 'on', 'at', 'from', 'to', 'an', 'a', 'by']);
+
+        function extractAcronym(journalName) {
+            const words = journalName
+                .toLowerCase()
+                .replace(/[-–—]/g, ' ')
+                .split(/\s+/)
+                .filter(word => word.length > 0 && !stopWords.has(word));
+            return words.map(word => word.charAt(0)).join('');
+        }
+
+        function searchJournals(query) {
+            if (!query || query.trim() === '') return [];
+            const results = [];
+            const searchTerms = query.toLowerCase().trim();
+
+            for (const [category, journals] of Object.entries(journalsData)) {
+                for (const journal of journals) {
+                    const journalName = journal.name.toLowerCase();
+                    let score = 0;
+
+                    // 精确匹配
+                    if (journalName === searchTerms) score = 100;
+                    // 包含匹配
+                    else if (journalName.includes(searchTerms)) score = 50;
+
+                    // 缩写匹配
+                    const acronym = extractAcronym(journal.name);
+                    if (acronym === searchTerms) score = Math.max(score, 80);
+                    else if (acronym.includes(searchTerms) && searchTerms.length >= 2) score = Math.max(score, 40);
+
+                    // 前缀匹配
+                    if (searchTerms.length >= 3 && journalName.startsWith(searchTerms)) score = Math.max(score, 60);
+
+                    if (score > 0) {
+                        results.push({
+                            name: journal.name,
+                            score: score,
+                            acronym: acronym
+                        });
+                    }
+                }
+            }
+
+            return results.sort((a, b) => b.score - a.score);
+        }
+
+        function testSearch() {
+            const query = document.getElementById('searchInput').value;
+            const results = searchJournals(query);
+            const resultDiv = document.getElementById('result');
+
+            if (results.length === 0) {
+                resultDiv.innerHTML = '<div class="test-result error">未找到结果</div>';
+            } else {
+                let html = `<div class="test-result success">找到 ${results.length} 个结果：</div>`;
+                results.slice(0, 10).forEach(r => {
+                    html += `<div class="test-result">
+                        <strong>${r.name}</strong><br>
+                        缩写: ${r.acronym}<br>
+                        分数: ${r.score}
+                    </div>`;
+                });
+                if (results.length > 10) {
+                    html += `<div class="test-result">... 还有 ${results.length - 10} 个结果</div>`;
+                }
+                resultDiv.innerHTML = html;
+            }
+        }
+
+        // 自动化测试
+        const autoTests = [
+            { query: 'jacs', shouldFind: 'JOURNAL OF THE AMERICAN CHEMICAL SOCIETY' },
+            { query: 'nature', shouldFind: 'NATURE' },
+            { query: 'am', shouldFind: 'ADVANCED MATERIALS' },
+            { query: 'jco', shouldFind: 'JOURNAL OF CLINICAL ONCOLOGY' },
+            { query: 'lan', shouldFind: 'LANCET' }
+        ];
+
+        function runAutoTests() {
+            const testDiv = document.getElementById('autoTests');
+            let html = '';
+
+            autoTests.forEach(test => {
+                const results = searchJournals(test.query);
+                const found = results.some(r => r.name === test.shouldFind);
+                const status = found ? '✓ 通过' : '✗ 失败';
+
+                html += `<div class="test-result ${found ? 'success' : 'error'}">
+                    <strong>${status}</strong><br>
+                    搜索: "${test.query}"<br>
+                    期望找到: ${test.shouldFind}<br>
+                    实际结果: ${found ? '找到' : '未找到'}<br>
+                    ${results.length > 0 ? `所有匹配 (${results.length} 个): ` + results.slice(0, 5).map(r => r.name).join(', ') : ''}
+                </div>`;
+            });
+
+            testDiv.innerHTML = html;
+        }
+
+        // 页面加载完成后运行自动化测试
+        window.onload = runAutoTests;
+
+        // 支持回车搜索
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') testSearch();
+        });
+    </script>
+</body>
+</html>

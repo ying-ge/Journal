@@ -5,7 +5,10 @@
       "Bash(git pull:*)",
       "Bash(git checkout:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(node test_acronym.js:*)",
+      "Bash(pkill:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []
