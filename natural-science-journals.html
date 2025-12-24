@@ -263,11 +263,11 @@
                 type="text"
                 class="search-input"
                 id="searchInput"
-                placeholder="请输入期刊名称、首字母缩写（JACS）或三字母前缀（Jou Ame Che Soc）"
+                placeholder="请输入期刊名称（支持英文和中文，不区分大小写）"
                 autocomplete="off"
             >
             <div class="search-tips">
-                💡 提示：支持多种搜索方式 - 期刊名称 / 首字母缩写（JACS）/ 三字母前缀（Jou Ame Che Soc，每个单词前3个字母）
+                💡 提示：输入完整或部分期刊名称即可，系统会自动匹配
             </div>
         </div>
 
@@ -357,144 +357,6 @@
             }
         }
 
-        function extractAbbreviation(text) {
-            // 提取首字母缩写（忽略常见介词和连词）
-            const skipWords = ['of', 'the', 'and', 'in', 'on', 'at', 'for', 'with', 'de', 'et', 'des', 'la', 'le'];
-            const words = text.split(/[\s-]+/);
-            return words
-                .filter(word => word.length > 0 && !skipWords.includes(word.toLowerCase()))
-                .map(word => word.charAt(0).toUpperCase())
-                .join('');
-        }
-
-        function extractThreeLetterPrefixes(text) {
-            // 提取每个单词的前三个字母（忽略常见介词和连词）
-            const skipWords = ['of', 'the', 'and', 'in', 'on', 'at', 'for', 'with', 'de', 'et', 'des', 'la', 'le'];
-            const words = text.split(/[\s-]+/);
-            return words
-                .filter(word => word.length > 0 && !skipWords.includes(word.toLowerCase()))
-                .map(word => word.substring(0, Math.min(3, word.length)).toLowerCase())
-                .join(' ');
-        }
-
-        function matchesAbbreviation(journalName, searchQuery) {
-            // 检查是否匹配首字母缩写
-            const abbreviation = extractAbbreviation(journalName);
-            const searchUpper = searchQuery.toUpperCase();
-
-            // 完全匹配缩写
-            if (abbreviation === searchUpper) {
-                return true;
-            }
-
-            // 缩写包含搜索词
-            if (abbreviation.includes(searchUpper)) {
-                return true;
-            }
-
-            return false;
-        }
-
-        function matchesThreeLetterPrefix(journalName, searchQuery) {
-            // 检查是否匹配三字母前缀格式（如 "Jou Ame Che Soc" 或 "mol can"）
-            const threeLetterPattern = extractThreeLetterPrefix(journalName);
-            const searchLower = searchQuery.toLowerCase().trim();
-
-            console.log('Three letter match - Journal:', journalName, 'Pattern:', threeLetterPattern, 'Search:', searchLower);
-
-            // 完全匹配三字母模式
-            if (threeLetterPattern === searchLower) {
-                console.log('  -> Full match');
-                return true;
-            }
-
-            // 三字母模式包含搜索词（支持部分匹配）
-            if (threeLetterPattern.includes(searchLower)) {
-                console.log('  -> Pattern includes search');
-                return true;
-            }
-
-            // 搜索词包含三字母模式（反向匹配）
-            if (searchLower.includes(threeLetterPattern)) {
-                console.log('  -> Search includes pattern');
-                return true;
-            }
-
-            // 单词级别的子序列匹配（支持不按顺序的输入）
-            const searchWords = searchLower.split(/\s+/).filter(w => w.length > 0);
-            const patternWords = threeLetterPattern.split(/\s+/).filter(w => w.length > 0);
-
-            console.log('  Search words:', searchWords, 'Pattern words:', patternWords);
-
-            if (searchWords.length > 0 && searchWords.length <= patternWords.length) {
-                let allMatched = true;
-                for (const searchWord of searchWords) {
-                    let found = false;
-                    for (const patternWord of patternWords) {
-                        // 支持前缀匹配和包含匹配
-                        if (patternWord.startsWith(searchWord) || searchWord.startsWith(patternWord) ||
-                            patternWord.includes(searchWord) || searchWord.includes(patternWord)) {
-                            found = true;
-                            console.log('    - Matched:', searchWord, 'with', patternWord);
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        allMatched = false;
-                        console.log('    - No match for:', searchWord);
-                        break;
-                    }
-                }
-                if (allMatched) {
-                    console.log('  -> All words matched');
-                    return true;
-                }
-            }
-
-            console.log('  -> No match');
-            return false;
-        }
-
-        function calculateMatchScore(journalName, searchTerms) {
-            let score = 0;
-            const journalLower = journalName.toLowerCase();
-
-            // 1. 完全匹配（最高分）
-            if (journalLower === searchTerms) {
-                score += 1000;
-            }
-
-            // 2. 三字母前缀完全匹配（高分）
-            const threeLetterPattern = extractThreeLetterPrefix(journalName);
-            if (threeLetterPattern === searchTerms) {
-                score += 500;
-                console.log('  Score +500: Three letter exact match');
-            }
-
-            // 3. 首字母缩写完全匹配（高分）
-            const abbreviation = extractAbbreviation(journalName);
-            if (abbreviation === searchTerms.toUpperCase()) {
-                score += 400;
-                console.log('  Score +400: Abbreviation exact match');
-            }
-
-            // 4. 期刊名以搜索词开头（中等分）
-            if (journalLower.startsWith(searchTerms)) {
-                score += 200;
-            }
-
-            // 5. 期刊名包含搜索词（低分）
-            if (journalLower.includes(searchTerms)) {
-                score += 100;
-            }
-
-            // 6. 匹配度打分（基于匹配的字符数比例）
-            const matchRatio = searchTerms.split('').filter(char => journalLower.includes(char)).length / searchTerms.length;
-            score += Math.round(matchRatio * 50);
-
-            return score;
-        }
-
         function searchJournals(query) {
             if (!query || query.trim() === '') {
                 return [];
@@ -510,48 +372,19 @@
             for (const [category, journals] of Object.entries(journalsData)) {
                 for (const journal of journals) {
                     const journalName = journal.name.toLowerCase();
-                    let matched = false;
-
-                    // 原有的子字符串匹配
                     if (journalName.includes(searchTerms)) {
-                        matched = true;
-                    }
-
-                    // 首字母缩写匹配（如 JACS）
-                    if (!matched && searchTerms.length >= 2 && /^[a-zA-Z]+$/.test(searchTerms)) {
-                        if (matchesAbbreviation(journal.name, searchTerms)) {
-                            matched = true;
-                        }
-                    }
-
-                    // 三字母前缀匹配（如 "Jou Ame Che Soc"）
-                    if (!matched && searchTerms.includes(' ')) {
-                        if (matchesThreeLetterPrefix(journal.name, searchTerms)) {
-                            matched = true;
-                        }
-                    }
-
-                    if (matched) {
-                        const score = calculateMatchScore(journal.name, searchTerms);
                         results.push({
                             name: journal.name,
                             level: levelMap[category] || category,
                             note: journal.note || '',
-                            originalCategory: category,
-                            score: score  // 添加评分
+                            originalCategory: category
                         });
                     }
                 }
             }
 
             console.log('Found results:', results.length);
-            // 按评分降序排序，然后按名称排序
-            return results.sort((a, b) => {
-                if (b.score !== a.score) {
-                    return b.score - a.score;  // 评分高的在前
-                }
-                return a.name.localeCompare(b.name);
-            });
+            return results.sort((a, b) => a.name.localeCompare(b.name));
         }
 
         function displayResults(results) {
