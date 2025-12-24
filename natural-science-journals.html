@@ -396,44 +396,62 @@
         }
 
         function matchesThreeLetterPrefix(journalName, searchQuery) {
-            // 检查是否匹配三字母前缀格式（如 "Jou Ame Che Soc"）
+            // 检查是否匹配三字母前缀格式（如 "Jou Ame Che Soc" 或 "mol can"）
             const threeLetterPattern = extractThreeLetterPrefix(journalName);
             const searchLower = searchQuery.toLowerCase().trim();
 
+            console.log('Three letter match - Journal:', journalName, 'Pattern:', threeLetterPattern, 'Search:', searchLower);
+
             // 完全匹配三字母模式
             if (threeLetterPattern === searchLower) {
+                console.log('  -> Full match');
                 return true;
             }
 
             // 三字母模式包含搜索词（支持部分匹配）
             if (threeLetterPattern.includes(searchLower)) {
+                console.log('  -> Pattern includes search');
                 return true;
             }
 
-            // 搜索词是三字母模式的子序列（支持不按顺序的输入）
+            // 搜索词包含三字母模式（反向匹配）
+            if (searchLower.includes(threeLetterPattern)) {
+                console.log('  -> Search includes pattern');
+                return true;
+            }
+
+            // 单词级别的子序列匹配（支持不按顺序的输入）
             const searchWords = searchLower.split(/\s+/).filter(w => w.length > 0);
             const patternWords = threeLetterPattern.split(/\s+/).filter(w => w.length > 0);
+
+            console.log('  Search words:', searchWords, 'Pattern words:', patternWords);
 
             if (searchWords.length > 0 && searchWords.length <= patternWords.length) {
                 let allMatched = true;
                 for (const searchWord of searchWords) {
                     let found = false;
                     for (const patternWord of patternWords) {
-                        if (patternWord.startsWith(searchWord)) {
+                        // 支持前缀匹配和包含匹配
+                        if (patternWord.startsWith(searchWord) || searchWord.startsWith(patternWord) ||
+                            patternWord.includes(searchWord) || searchWord.includes(patternWord)) {
                             found = true;
+                            console.log('    - Matched:', searchWord, 'with', patternWord);
                             break;
                         }
                     }
                     if (!found) {
                         allMatched = false;
+                        console.log('    - No match for:', searchWord);
                         break;
                     }
                 }
                 if (allMatched) {
+                    console.log('  -> All words matched');
                     return true;
                 }
             }
 
+            console.log('  -> No match');
             return false;
         }
 
