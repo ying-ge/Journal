@@ -263,11 +263,11 @@
                 type="text"
                 class="search-input"
                 id="searchInput"
-                placeholder="请输入期刊名称或首字母缩写（如 JACS, ACR 等）"
+                placeholder="请输入期刊名称、首字母缩写（JACS）或三字母前缀（Jou Ame Che Soc）"
                 autocomplete="off"
             >
             <div class="search-tips">
-                💡 提示：支持期刊名称搜索和首字母缩写搜索（如 JACS 查找 Journal of the American Chemical Society）
+                💡 提示：支持多种搜索方式 - 期刊名称 / 首字母缩写（JACS）/ 三字母前缀（Jou Ame Che Soc，每个单词前3个字母）
             </div>
         </div>
 
@@ -367,6 +367,16 @@
                 .join('');
         }
 
+        function extractThreeLetterPrefixes(text) {
+            // 提取每个单词的前三个字母（忽略常见介词和连词）
+            const skipWords = ['of', 'the', 'and', 'in', 'on', 'at', 'for', 'with', 'de', 'et', 'des', 'la', 'le'];
+            const words = text.split(/[\s-]+/);
+            return words
+                .filter(word => word.length > 0 && !skipWords.includes(word.toLowerCase()))
+                .map(word => word.substring(0, Math.min(3, word.length)).toLowerCase())
+                .join(' ');
+        }
+
         function matchesAbbreviation(journalName, searchQuery) {
             // 检查是否匹配首字母缩写
             const abbreviation = extractAbbreviation(journalName);
@@ -380,6 +390,48 @@
             // 缩写包含搜索词
             if (abbreviation.includes(searchUpper)) {
                 return true;
+            }
+
+            return false;
+        }
+
+        function matchesThreeLetterPrefix(journalName, searchQuery) {
+            // 检查是否匹配三字母前缀格式（如 "Jou Ame Che Soc"）
+            const threeLetterPattern = extractThreeLetterPrefix(journalName);
+            const searchLower = searchQuery.toLowerCase().trim();
+
+            // 完全匹配三字母模式
+            if (threeLetterPattern === searchLower) {
+                return true;
+            }
+
+            // 三字母模式包含搜索词（支持部分匹配）
+            if (threeLetterPattern.includes(searchLower)) {
+                return true;
+            }
+
+            // 搜索词是三字母模式的子序列（支持不按顺序的输入）
+            const searchWords = searchLower.split(/\s+/).filter(w => w.length > 0);
+            const patternWords = threeLetterPattern.split(/\s+/).filter(w => w.length > 0);
+
+            if (searchWords.length > 0 && searchWords.length <= patternWords.length) {
+                let allMatched = true;
+                for (const searchWord of searchWords) {
+                    let found = false;
+                    for (const patternWord of patternWords) {
+                        if (patternWord.startsWith(searchWord)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        allMatched = false;
+                        break;
+                    }
+                }
+                if (allMatched) {
+                    return true;
+                }
             }
 
             return false;
@@ -407,9 +459,16 @@
                         matched = true;
                     }
 
-                    // 首字母缩写匹配
+                    // 首字母缩写匹配（如 JACS）
                     if (!matched && searchTerms.length >= 2 && /^[a-zA-Z]+$/.test(searchTerms)) {
                         if (matchesAbbreviation(journal.name, searchTerms)) {
+                            matched = true;
+                        }
+                    }
+
+                    // 三字母前缀匹配（如 "Jou Ame Che Soc"）
+                    if (!matched && searchTerms.includes(' ')) {
+                        if (matchesThreeLetterPrefix(journal.name, searchTerms)) {
                             matched = true;
                         }
                     }
