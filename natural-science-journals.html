@@ -159,6 +159,43 @@
             display: block;
         }
 
+        .sjr-metrics {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+        }
+
+        .sjr-main {
+            color: white;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sjr-main strong {
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .sjr-quartile {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .sjr-details {
+            display: flex;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.8rem;
+        }
+
         .results-header {
             display: flex;
             justify-content: space-between;
@@ -313,8 +350,10 @@
             </div>
         </div>
     <script src="journals.js"></script>
+    <script src="sjr_metrics.js"></script>
     <script>
         let dataLoaded = false;
+        let sjrData = {};
         const levelMap = {
             'nature、cell、science等国际顶级期刊评价目录': '顶级期刊',
             'SCIQ1区A类期刊评价目录': 'SCI Q1区A类',
@@ -326,6 +365,26 @@
             '中国科技期刊卓越行动计划入选期刊目录': '卓越行动计划',
             '高起点新刊项目': '高起点新刊'
         };
+
+        // 加载 SJR 指标数据
+        function loadSJRData() {
+            try {
+                if (typeof sjrMetrics !== 'undefined') {
+                    sjrData = sjrMetrics;
+                    console.log('SJR metrics loaded:', Object.keys(sjrData).length, 'journals');
+                } else {
+                    console.log('SJR metrics not available');
+                }
+            } catch (error) {
+                console.error('Failed to load SJR data:', error);
+            }
+        }
+
+        // 获取期刊的 SJR 指标
+        function getSJRMetrics(journalName) {
+            const upperName = journalName.toUpperCase();
+            return sjrData[upperName] || null;
+        }
 
         function loadJournals() {
             try {
@@ -500,6 +559,18 @@
             results.forEach(result => {
                 let extraInfo = '';
 
+                // 添加 SJR 指标
+                const sjrMetrics = getSJRMetrics(result.name);
+                if (sjrMetrics && sjrMetrics.sjr) {
+                    extraInfo += `<div class="sjr-metrics">
+                        <div class="sjr-main">📊 SJR: <strong>${sjrMetrics.sjr}</strong> <span class="sjr-quartile">${sjrMetrics.sjr_quartile}</span></div>
+                        <div class="sjr-details">
+                            <span>H-index: ${sjrMetrics.h_index}</span>
+                            <span>引用/文档: ${sjrMetrics.citations_per_doc}</span>
+                        </div>
+                    </div>`;
+                }
+
                 // 添加缩写提示（如果是通过缩写匹配找到的）
                 if (result.acronym && result.matchType && result.matchType.includes('acronym')) {
                     extraInfo += `<div class="journal-info">🔤 缩写：${result.acronym.toUpperCase()}</div>`;
@@ -665,9 +736,13 @@
 
         // DOM 加载完成后初始化
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', loadJournals);
+            document.addEventListener('DOMContentLoaded', () => {
+                loadJournals();
+                loadSJRData();
+            });
         } else {
             loadJournals();
+            loadSJRData();
         }
     </script>
 </body>

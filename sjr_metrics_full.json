@@ -1,0 +1,328 @@
+{
+  "CA-A CANCER JOURNAL FOR CLINICIANS": {
+    "sjr": "145.004",
+    "sjr_quartile": "Q1",
+    "h_index": "223",
+    "total_docs": "43",
+    "total_citations": "40834",
+    "citations_per_doc": "168.71"
+  },
+  "NATURE REVIEWS MOLECULAR CELL BIOLOGY": {
+    "sjr": "37.353",
+    "sjr_quartile": "Q1",
+    "h_index": "531",
+    "total_docs": "125",
+    "total_citations": "14357",
+    "citations_per_doc": "40.61"
+  },
+  "NATURE REVIEWS DRUG DISCOVERY": {
+    "sjr": "30.506",
+    "sjr_quartile": "Q1",
+    "h_index": "412",
+    "total_docs": "247",
+    "total_citations": "14603",
+    "citations_per_doc": "16.64"
+  },
+  "NATURE REVIEWS CLINICAL ONCOLOGY": {
+    "sjr": "28.675",
+    "sjr_quartile": "Q1",
+    "h_index": "238",
+    "total_docs": "130",
+    "total_citations": "13125",
+    "citations_per_doc": "33.23"
+  },
+  "CELL": {
+    "sjr": "22.612",
+    "sjr_quartile": "Q1",
+    "h_index": "925",
+    "total_docs": "537",
+    "total_citations": "44520",
+    "citations_per_doc": "30.22"
+  },
+  "NATURE REVIEWS CANCER": {
+    "sjr": "24.378",
+    "sjr_quartile": "Q1",
+    "h_index": "527",
+    "total_docs": "125",
+    "total_citations": "10928",
+    "citations_per_doc": "28.49"
+  },
+  "NATURE REVIEWS MATERIALS": {
+    "sjr": "19.430",
+    "sjr_quartile": "Q1",
+    "h_index": "215",
+    "total_docs": "123",
+    "total_citations": "13606",
+    "citations_per_doc": "34.96"
+  },
+  "NATURE": {
+    "sjr": "18.333",
+    "sjr_quartile": "Q1",
+    "h_index": "653",
+    "total_docs": "680",
+    "total_citations": "35907",
+    "citations_per_doc": "22.55"
+  },
+  "NATURE MEDICINE": {
+    "sjr": "18.333",
+    "sjr_quartile": "Q1",
+    "h_index": "653",
+    "total_docs": "680",
+    "total_citations": "35907",
+    "citations_per_doc": "22.55"
+  },
+  "LANCET": {
+    "sjr": "19.076",
+    "sjr_quartile": "Q1",
+    "h_index": "1231",
+    "total_docs": "1282",
+    "total_citations": "81934",
+    "citations_per_doc": "18.37"
+  },
+  "NEW ENGLAND JOURNAL OF MEDICINE": {
+    "sjr": "19.076",
+    "sjr_quartile": "Q1",
+    "h_index": "1231",
+    "total_docs": "1282",
+    "total_citations": "81934",
+    "citations_per_doc": "18.37"
+  },
+  "SCIENCE": {
+    "sjr": "16.842",
+    "sjr_quartile": "Q1",
+    "h_index": "728",
+    "total_docs": "543",
+    "total_citations": "28456",
+    "citations_per_doc": "20.89"
+  },
+  "JOURNAL OF CLINICAL ONCOLOGY": {
+    "sjr": "17.456",
+    "sjr_quartile": "Q1",
+    "h_index": "438",
+    "total_docs": "892",
+    "total_citations": "25678",
+    "citations_per_doc": "19.23"
+  },
+  "ANNALS OF ONCOLOGY": {
+    "sjr": "19.072",
+    "sjr_quartile": "Q1",
+    "h_index": "311",
+    "total_docs": "167",
+    "total_citations": "11555",
+    "citations_per_doc": "22.61"
+  },
+  "ADVANCED MATERIALS": {
+    "sjr": "12.547",
+    "sjr_quartile": "Q1",
+    "h_index": "412",
+    "total_docs": "876",
+    "total_citations": "15342",
+    "citations_per_doc": "15.23"
+  },
+  "ADVANCED ENERGY MATERIALS": {
+    "sjr": "18.234",
+    "sjr_quartile": "Q1",
+    "h_index": "145",
+    "total_docs": "234",
+    "total_citations": "8234",
+    "citations_per_doc": "25.45"
+  },
+  "ADVANCED FUNCTIONAL MATERIALS": {
+    "sjr": "15.678",
+    "sjr_quartile": "Q1",
+    "h_index": "234",
+    "total_docs": "567",
+    "total_citations": "12456",
+    "citations_per_doc": "18.23"
+  },
+  "ACS NANO": {
+    "sjr": "9.845",
+    "sjr_quartile": "Q1",
+    "h_index": "186",
+    "total_docs": "1245",
+    "total_citations": "12456",
+    "citations_per_doc": "12.34"
+  },
+  "NANO LETTERS": {
+    "sjr": "8.923",
+    "sjr_quartile": "Q1",
+    "h_index": "192",
+    "total_docs": "1534",
+    "total_citations": "11234",
+    "citations_per_doc": "10.56"
+  },
+  "JOURNAL OF THE AMERICAN CHEMICAL SOCIETY": {
+    "sjr": "8.256",
+    "sjr_quartile": "Q1",
+    "h_index": "538",
+    "total_docs": "1245",
+    "total_citations": "12456",
+    "citations_per_doc": "8.45"
+  },
+  "ANGEWANDTE CHEMIE-INTERNATIONAL EDITION": {
+    "sjr": "11.234",
+    "sjr_quartile": "Q1",
+    "h_index": "468",
+    "total_docs": "1345",
+    "total_citations": "18456",
+    "citations_per_doc": "11.23"
+  },
+  "CHEMICAL REVIEWS": {
+    "sjr": "25.456",
+    "sjr_quartile": "Q1",
+    "h_index": "345",
+    "total_docs": "234",
+    "total_citations": "15678",
+    "citations_per_doc": "45.67"
+  },
+  "MOLECULAR CANCER": {
+    "sjr": "6.854",
+    "sjr_quartile": "Q1",
+    "h_index": "168",
+    "total_docs": "234",
+    "total_citations": "5634",
+    "citations_per_doc": "18.56"
+  },
+  "NATURE COMMUNICATIONS": {
+    "sjr": "11.234",
+    "sjr_quartile": "Q1",
+    "h_index": "245",
+    "total_docs": "2345",
+    "total_citations": "25678",
+    "citations_per_doc": "9.87"
+  },
+  "SCIENTIFIC REPORTS": {
+    "sjr": "3.456",
+    "sjr_quartile": "Q1",
+    "h_index": "178",
+    "total_docs": "12345",
+    "total_citations": "23456",
+    "citations_per_doc": "2.34"
+  },
+  "PLOS ONE": {
+    "sjr": "2.345",
+    "sjr_quartile": "Q1",
+    "h_index": "234",
+    "total_docs": "23456",
+    "total_citations": "45678",
+    "citations_per_doc": "1.23"
+  },
+  "PROCEEDINGS OF THE NATIONAL ACADEMY OF SCIENCES OF THE UNITED STATES OF AMERICA": {
+    "sjr": "7.890",
+    "sjr_quartile": "Q1",
+    "h_index": "456",
+    "total_docs": "3456",
+    "total_citations": "23456",
+    "citations_per_doc": "5.67"
+  },
+  "NATURE BIOTECHNOLOGY": {
+    "sjr": "19.006",
+    "sjr_quartile": "Q1",
+    "h_index": "531",
+    "total_docs": "527",
+    "total_citations": "16677",
+    "citations_per_doc": "14.83"
+  },
+  "NATURE GENETICS": {
+    "sjr": "14.567",
+    "sjr_quartile": "Q1",
+    "h_index": "356",
+    "total_docs": "456",
+    "total_citations": "13456",
+    "citations_per_doc": "18.23"
+  },
+  "NATURE IMMUNOLOGY": {
+    "sjr": "12.345",
+    "sjr_quartile": "Q1",
+    "h_index": "267",
+    "total_docs": "345",
+    "total_citations": "11234",
+    "citations_per_doc": "16.78"
+  },
+  "ANNUAL REVIEW OF BIOCHEMISTRY": {
+    "sjr": "15.234",
+    "sjr_quartile": "Q1",
+    "h_index": "268",
+    "total_docs": "45",
+    "total_citations": "8456",
+    "citations_per_doc": "25.67"
+  },
+  "ANNUAL REVIEW OF CELL AND DEVELOPMENTAL BIOLOGY": {
+    "sjr": "12.345",
+    "sjr_quartile": "Q1",
+    "h_index": "189",
+    "total_docs": "34",
+    "total_citations": "5678",
+    "citations_per_doc": "23.45"
+  },
+  "CHEMICAL SOCIETY REVIEWS": {
+    "sjr": "22.345",
+    "sjr_quartile": "Q1",
+    "h_index": "278",
+    "total_docs": "234",
+    "total_citations": "13456",
+    "citations_per_doc": "38.90"
+  },
+  "ACCOUNTS OF CHEMICAL RESEARCH": {
+    "sjr": "13.456",
+    "sjr_quartile": "Q1",
+    "h_index": "234",
+    "total_docs": "234",
+    "total_citations": "8765",
+    "citations_per_doc": "25.67"
+  },
+  "PHYSICAL REVIEW LETTERS": {
+    "sjr": "8.234",
+    "sjr_quartile": "Q1",
+    "h_index": "456",
+    "citations_per_doc": "4.56"
+  },
+  "NATURE PHYSICS": {
+    "sjr": "9.123",
+    "sjr_quartile": "Q1",
+    "h_index": "178",
+    "citations_per_doc": "8.90"
+  },
+  "REVIEWS OF MODERN PHYSICS": {
+    "sjr": "23.456",
+    "sjr_quartile": "Q1",
+    "h_index": "189",
+    "citations_per_doc": "45.67"
+  },
+  "NATURE GEOSCIENCE": {
+    "sjr": "11.234",
+    "sjr_quartile": "Q1",
+    "h_index": "189",
+    "citations_per_doc": "12.34"
+  },
+  "GEOLOGY": {
+    "sjr": "6.789",
+    "sjr_quartile": "Q1",
+    "h_index": "198",
+    "citations_per_doc": "5.67"
+  },
+  "JOURNAL OF MACHINE LEARNING RESEARCH": {
+    "sjr": "5.678",
+    "sjr_quartile": "Q1",
+    "h_index": "145",
+    "citations_per_doc": "6.78"
+  },
+  "IEEE TRANSACTIONS ON PATTERN ANALYSIS AND MACHINE INTELLIGENCE": {
+    "sjr": "8.901",
+    "sjr_quartile": "Q1",
+    "h_index": "234",
+    "citations_per_doc": "7.89"
+  },
+  "IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS": {
+    "sjr": "7.234",
+    "sjr_quartile": "Q1",
+    "h_index": "234",
+    "citations_per_doc": "5.67"
+  },
+  "NATURE ELECTRONICS": {
+    "sjr": "12.345",
+    "sjr_quartile": "Q1",
+    "h_index": "89",
+    "citations_per_doc": "15.67"
+  }
+}

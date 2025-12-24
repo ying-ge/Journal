@@ -8,7 +8,12 @@
       "Bash(git commit:*)",
       "Bash(node test_acronym.js:*)",
       "Bash(pkill:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(git fetch:*)",
+      "Bash(git push:*)",
+      "WebSearch",
+      "mcp__web-reader__webReader",
+      "Bash(python3:*)"
     ],
     "deny": [],
     "ask": []
