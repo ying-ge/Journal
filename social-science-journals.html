@@ -476,10 +476,10 @@
             results.forEach(result => {
                 let extraInfo = '';
 
-                // 添加缩写提示（如果是通过缩写匹配找到的）
-                if (result.acronym && result.matchType && result.matchType.includes('acronym')) {
-                    extraInfo += `<div class="journal-info">🔤 缩写：${result.acronym.toUpperCase()}</div>`;
-                }
+                // 缩写不再显示
+                // if (result.acronym && result.matchType && result.matchType.includes('acronym')) {
+                //     extraInfo += `<div class="journal-info">🔤 缩写：${result.acronym.toUpperCase()}</div>`;
+                // }
 
                 // 添加备注
                 if (result.note) {
