@@ -422,12 +422,31 @@
             try {
                 if (typeof sjrMetrics !== 'undefined') {
                     sjrData = sjrMetrics;
-                    console.log('SJR metrics loaded:', Object.keys(sjrData).length, 'journals');
+                    console.log('✅ SJR metrics loaded:', Object.keys(sjrData).length, 'journals');
+
+                    // 检查 APC 字段
+                    let withAPC = 0;
+                    let sampleJournal = null;
+                    for (const [key, value] of Object.entries(sjrData)) {
+                        if (value.apc_usd) {
+                            withAPC++;
+                            if (!sampleJournal && withAPC <= 3) {
+                                sampleJournal = { name: key, data: value };
+                            }
+                        }
+                    }
+                    console.log('✅ Journals with APC:', withAPC, '/', Object.keys(sjrData).length);
+                    console.log('📊 Sample journal with APC:', sampleJournal);
+
+                    // 测试获取期刊
+                    const testResult = getSJRMetrics('NATURE');
+                    console.log('🧪 Test getSJRMetrics("NATURE"):', testResult);
                 } else {
-                    console.log('SJR metrics not available');
+                    console.error('❌ SJR metrics not available');
+                    console.error('检查 sjr_metrics.js 文件是否正确加载');
                 }
             } catch (error) {
-                console.error('Failed to load SJR data:', error);
+                console.error('❌ Failed to load SJR data:', error);
             }
         }
 
