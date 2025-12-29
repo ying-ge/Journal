@@ -1168,6 +1168,84 @@
         // 当前选中的水平分类筛选
         let selectedLevel = null;
 
+        // ==================== 水平分类筛选 ====================
+
+        // 初始化水平分类筛选器
+        function initializeLevelFilter() {
+            const levelOptionsContainer = document.getElementById('levelOptions');
+            const levels = getAllLevelCategories();
+
+            // 生成水平分类选项
+            let optionsHtml = '';
+            levels.forEach(level => {
+                optionsHtml += `
+                    <div class="field-option" data-level="${level.name}" onclick="selectLevel('${level.name}')">
+                        <span class="field-icon">${level.icon}</span>
+                        <span>${level.name}</span>
+                    </div>
+                `;
+            });
+
+            levelOptionsContainer.innerHTML = optionsHtml;
+        }
+
+        // 选择水平分类
+        function selectLevel(levelName) {
+            const clearBtn = document.getElementById('clearLevelBtn');
+            const options = document.querySelectorAll('#levelOptions .field-option');
+
+            if (selectedLevel === levelName) {
+                // 取消选择
+                selectedLevel = null;
+                options.forEach(opt => opt.classList.remove('active'));
+                clearBtn.style.display = 'none';
+
+                // 重新执行搜索（无筛选）
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput.value.trim()) {
+                    performSearch(searchInput.value);
+                } else if (selectedField) {
+                    // 如果有研究领域筛选，重新执行研究领域筛选
+                    filterByField(selectedField);
+                } else {
+                    // 如果搜索框为空且无研究领域筛选，显示所有期刊
+                    showAllJournals();
+                }
+            } else {
+                // 选择新的分类
+                selectedLevel = levelName;
+                options.forEach(opt => opt.classList.remove('active'));
+                const selectedOption = document.querySelector(`#levelOptions .field-option[data-level="${levelName}"]`);
+                if (selectedOption) {
+                    selectedOption.classList.add('active');
+                }
+                clearBtn.style.display = 'block';
+
+                // 执行筛选搜索
+                filterByLevel(levelName);
+            }
+        }
+
+        // 清除水平分类筛选
+        function clearLevelFilter() {
+            selectedLevel = null;
+            const options = document.querySelectorAll('#levelOptions .field-option');
+            options.forEach(opt => opt.classList.remove('active'));
+            document.getElementById('clearLevelBtn').style.display = 'none';
+
+            // 重新执行搜索（无筛选）
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput.value.trim()) {
+                performSearch(searchInput.value);
+            } else if (selectedField) {
+                // 如果有研究领域筛选，重新执行研究领域筛选
+                filterByField(selectedField);
+            } else {
+                // 如果搜索框为空且无研究领域筛选，显示所有期刊
+                showAllJournals();
+            }
+        }
+
         // 初始化研究领域筛选器
         function initializeFieldFilter() {
             const fieldOptionsContainer = document.getElementById('fieldOptions');
@@ -1294,84 +1372,6 @@
 
             statsHtml += `</div>`;
             resultsDiv.insertAdjacentHTML('afterbegin', statsHtml);
-        }
-
-        // ==================== 水平分类筛选 ====================
-
-        // 初始化水平分类筛选器
-        function initializeLevelFilter() {
-            const levelOptionsContainer = document.getElementById('levelOptions');
-            const levels = getAllLevelCategories();
-
-            // 生成水平分类选项
-            let optionsHtml = '';
-            levels.forEach(level => {
-                optionsHtml += `
-                    <div class="field-option" data-level="${level.name}" onclick="selectLevel('${level.name}')">
-                        <span class="field-icon">${level.icon}</span>
-                        <span>${level.name}</span>
-                    </div>
-                `;
-            });
-
-            levelOptionsContainer.innerHTML = optionsHtml;
-        }
-
-        // 选择水平分类
-        function selectLevel(levelName) {
-            const clearBtn = document.getElementById('clearLevelBtn');
-            const options = document.querySelectorAll('#levelOptions .field-option');
-
-            if (selectedLevel === levelName) {
-                // 取消选择
-                selectedLevel = null;
-                options.forEach(opt => opt.classList.remove('active'));
-                clearBtn.style.display = 'none';
-
-                // 重新执行搜索（无筛选）
-                const searchInput = document.getElementById('searchInput');
-                if (searchInput.value.trim()) {
-                    performSearch(searchInput.value);
-                } else if (selectedField) {
-                    // 如果有研究领域筛选，重新执行研究领域筛选
-                    filterByField(selectedField);
-                } else {
-                    // 如果搜索框为空且无研究领域筛选，显示所有期刊
-                    showAllJournals();
-                }
-            } else {
-                // 选择新的分类
-                selectedLevel = levelName;
-                options.forEach(opt => opt.classList.remove('active'));
-                const selectedOption = document.querySelector(`#levelOptions .field-option[data-level="${levelName}"]`);
-                if (selectedOption) {
-                    selectedOption.classList.add('active');
-                }
-                clearBtn.style.display = 'block';
-
-                // 执行筛选搜索
-                filterByLevel(levelName);
-            }
-        }
-
-        // 清除水平分类筛选
-        function clearLevelFilter() {
-            selectedLevel = null;
-            const options = document.querySelectorAll('#levelOptions .field-option');
-            options.forEach(opt => opt.classList.remove('active'));
-            document.getElementById('clearLevelBtn').style.display = 'none';
-
-            // 重新执行搜索（无筛选）
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput.value.trim()) {
-                performSearch(searchInput.value);
-            } else if (selectedField) {
-                // 如果有研究领域筛选，重新执行研究领域筛选
-                filterByField(selectedField);
-            } else {
-                // 如果搜索框为空且无研究领域筛选，显示所有期刊
-                showAllJournals();
-            }
         }
 
         // 按水平分类筛选期刊
