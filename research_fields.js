@@ -2,8 +2,8 @@
 // 基于期刊分类创建研究领域筛选
 // 更新时间: 2025-12-29
 
-// 主要研究领域分类
-const researchFields = {
+// 自然科学类研究领域分类（用于 natural-science-journals.html）
+const naturalScienceFields = {
     '医学与健康': {
         icon: '🏥',
         color: '#e74c3c',
@@ -51,7 +51,11 @@ const researchFields = {
         color: '#f39c12',
         keywords: ['AGRICULTURE', 'FOOD', 'FORESTRY', 'FISHERIES', 'HORTICULTURE', 'VETERINARY'],
         categories: ['农业', '食品科学', '林业', '渔业']
-    },
+    }
+};
+
+// 人文社科类研究领域分类（用于 social-science-journals.html）
+const socialScienceFields = {
     '人文社科': {
         icon: '📚',
         color: '#8e44ad',
@@ -64,6 +68,12 @@ const researchFields = {
         keywords: ['ART', 'DESIGN', 'MUSIC', 'ARCHITECTURE', 'FILM', 'LITERATURE'],
         categories: ['艺术', '设计', '音乐', '建筑']
     }
+};
+
+// 默认研究领域（包含所有，用于向后兼容）
+const researchFields = {
+    ...naturalScienceFields,
+    ...socialScienceFields
 };
 
 /**
@@ -126,6 +136,30 @@ function getAllResearchFields() {
         name: name,
         icon: researchFields[name].icon,
         color: researchFields[name].color
+    }));
+}
+
+/**
+ * 获取自然科学类研究领域列表
+ * @returns {array} 自然科学领域数组
+ */
+function getNaturalScienceFields() {
+    return Object.keys(naturalScienceFields).map(name => ({
+        name: name,
+        icon: naturalScienceFields[name].icon,
+        color: naturalScienceFields[name].color
+    }));
+}
+
+/**
+ * 获取人文社科类研究领域列表
+ * @returns {array} 人文社科领域数组
+ */
+function getSocialScienceFields() {
+    return Object.keys(socialScienceFields).map(name => ({
+        name: name,
+        icon: socialScienceFields[name].icon,
+        color: socialScienceFields[name].color
     }));
 }
 
