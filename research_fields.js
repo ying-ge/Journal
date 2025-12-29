@@ -9,13 +9,13 @@ const naturalScienceFields = {
         color: '#e74c3c',
         keywords: ['MEDICINE', 'HEALTH', 'CLINICAL', 'PHARMACY', 'NURSING', 'DENTISTRY', 'VETERINARY',
                     // 疾病类型
-                    'CANCER', 'ONCOLOGY', 'LEUKEMIA', 'TUMOR', 'TUMOUR', 'DIABETES',
+                    'CANCER', 'ONCOLOGY', 'LEUKEMIA', 'TUMOR', 'TUMOUR', 'DIABETES', 'DIABET',
                     'ARTHRITIS', 'PNEUMONIA', 'FRACTURE', 'DISEASE',
                     // 器官系统
                     'HEART', 'CARDIO', 'CARDIOVASCULAR', 'KIDNEY', 'RENAL',
                     'NEPHROLOGY', 'LIVER', 'HEPATIC', 'HEPATOLOGY',
                     'LUNG', 'PULMONARY', 'PULMONOLOGY', 'RESPIRATORY',
-                    'BRAIN', 'NEUROLOGY', 'NEURAL', 'NEUROSURGERY',
+                    'BRAIN', 'NEUROLOGY', 'NEURAL', 'NEUROSURGERY', 'NEUROINFLAMMATION',
                     'BONE', 'ORTHOPEDIC', 'ORTHOPAEDIC',
                     'BLOOD', 'HEMATOLOGY',
                     'SKIN', 'DERMATOLOGY',
@@ -24,13 +24,14 @@ const naturalScienceFields = {
                     'STOMACH', 'GASTRO', 'GASTROENTEROLOGY',
                     'BLADDER', 'UROLOGY',
                     // 医学科
-                    'SURGERY', 'SURGICAL', 'PATHOLOGY', 'RADIOLOGY',
+                    'SURGERY', 'SURGICAL', 'PATHOLOGY', 'RADIOLOGY', 'PHARMACOLOGY',
                     'PEDIATRICS', 'GERIATRICS', 'PSYCHIATRY',
-                    'GYNECOLOGY', 'OBSTETRICS', 'ANESTHESIA',
+                    'GYNECOLOGY', 'OBSTETRICS', 'REPRODUCTION', 'ANESTHESIA',
                     'EMERGENCY', 'CRITICAL', 'INTENSIVE',
                     // 其他
                     'MEDICAL', 'HOSPITAL', 'PATIENT', 'THERAPY', 'TREATMENT',
                     'AIDS', 'HIV', 'VIRUS', 'VIRAL', 'DRUG', 'THERANOSTICS',
+                    'INFECTION', 'AUTOPHAGY', 'ALZHEIMERS', 'OBESITY',
                     // 著名医学期刊
                     'LANCET', 'NEW ENGLAND JOURNAL', 'JAMA', 'BMJ'],
         categories: ['医学', '药学', '护理学', '兽医学', '口腔医学']

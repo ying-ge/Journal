@@ -206,6 +206,16 @@
             text-decoration: underline;
         }
 
+        /* 对比表格中的期刊名链接样式 */
+        .compare-table th a {
+            transition: color 0.2s ease;
+        }
+
+        .compare-table th a:hover {
+            color: #74b9ff !important;
+            text-decoration: underline;
+        }
+
         .journal-header {
             display: flex;
             align-items: center;
@@ -358,55 +368,87 @@
             padding: 15px;
             text-align: left;
             border-bottom: 1px solid #eaeaea;
+            color: #000000;
         }
 
         .compare-table th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #2c3e50;
+            background: #ffffff;
+            font-weight: 700;
+            color: #000000;
             position: sticky;
             top: 0;
+            border-bottom: 2px solid #000000;
         }
 
         .compare-table th:first-child {
-            background: #74b9ff;
-            color: white;
+            background: #ffffff;
+            color: #000000;
             width: 200px;
+            font-weight: 700;
         }
 
         .compare-table td:first-child {
-            font-weight: 600;
-            color: #2c3e50;
+            font-weight: 700;
+            color: #000000;
             background: #f8f9fa;
         }
 
         .metric-value {
-            color: #2c3e50;
+            color: #000000;
         }
 
         .metric-value.highlight {
-            color: #00b894;
+            color: #000000;
             font-weight: 600;
         }
 
         .metric-value.jif {
-            color: #00b894;
-            font-weight: 600;
+            color: #000000;
+            font-weight: 700;
         }
 
         .metric-value.sjr {
-            color: #6c5ce7;
-            font-weight: 600;
+            color: #000000;
+            font-weight: 700;
         }
 
         .journal-level {
             display: inline-block;
             padding: 5px 12px;
-            background: #74b9ff;
-            color: white;
+            background: #f8f9fa;
+            color: #000000;
+            border: 1px solid #000000;
             border-radius: 4px;
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 600;
+        }
+
+        .journal-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .journal-jcr {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: #f8f9fa;
+            color: #000000;
+            border: 1px solid #000000;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .journal-jcr .sci-label {
+            font-weight: 700;
+        }
+
+        .journal-jcr .jcr-label {
+            font-weight: 500;
         }
 
         .journal-note {
@@ -414,10 +456,10 @@
             color: #5a6c7d;
             font-size: 0.85rem;
             font-weight: 400;
-            padding: 6px 10px;
-            background: #e9ecef;
-            border-radius: 4px;
-            display: inline-block;
+            padding: 4px 8px;
+            background: #f1f3f5;
+            border-radius: 3px;
+            display: block;
         }
 
         .journal-info {
@@ -429,6 +471,22 @@
             background: #f1f3f5;
             border-radius: 3px;
             display: block;
+        }
+
+        /* 统一信息容器 */
+        .journal-meta-container {
+            margin-top: 6px;
+            padding: 8px;
+            background: #f8f9fa;
+            border: 1px solid #eaeaea;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .journal-meta-item {
+            padding: 4px 0;
+            color: #5a6c7d;
+            line-height: 1.4;
         }
 
         .sjr-metrics {
@@ -606,7 +664,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+            z-index: 3000;
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -677,6 +735,223 @@
             color: #2c3e50;
         }
 
+        /* 保存PDF按钮样式 */
+        .save-pdf-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .save-pdf-btn:hover {
+            background: #229954;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+        }
+
+        /* 打印样式 */
+        @media print {
+            /* 隐藏不需要打印的元素 */
+            body > *:not(.print-only),
+            .container > *:not(.results),
+            .search-box,
+            .back-link,
+            .compare-actions,
+            .close-btn,
+            .journal-checkbox,
+            .filter-header,
+            .filter-options,
+            .api-usage-tip,
+            .settings-btn,
+            .ai-modal-close,
+            .save-pdf-btn,
+            .compare-close,
+            .header {
+                display: none !important;
+            }
+
+            /* 显示打印专用容器 */
+            .print-only {
+                display: block !important;
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                background: white !important;
+                padding: 15px !important;
+            }
+
+            /* 缩小标题字体 */
+            .print-only h1 {
+                font-size: 18px !important;
+                margin-bottom: 8px !important;
+                margin-top: 0 !important;
+                color: #000000 !important;
+                font-weight: 700 !important;
+            }
+
+            .print-only h2 {
+                font-size: 16px !important;
+                margin-bottom: 6px !important;
+                margin-top: 10px !important;
+                color: #000000 !important;
+                font-weight: 700 !important;
+            }
+
+            .print-only h3 {
+                font-size: 14px !important;
+                margin-bottom: 5px !important;
+                margin-top: 8px !important;
+                color: #000000 !important;
+                font-weight: 700 !important;
+            }
+
+            /* 缩小段落字体 */
+            .print-only p {
+                font-size: 11px !important;
+                margin-bottom: 5px !important;
+                line-height: 1.3 !important;
+                color: #000000 !important;
+            }
+
+            /* 只显示结果区域 */
+            .results {
+                display: block !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+
+            /* AI评价和对比报告的打印样式 */
+            .ai-modal-content,
+            .compare-content {
+                box-shadow: none !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 15px !important;
+            }
+
+            .ai-modal-header,
+            .compare-header {
+                position: static !important;
+            }
+
+            /* 优化表格打印 - 全部黑白 */
+            table {
+                page-break-inside: auto;
+                width: 100% !important;
+                font-size: 10px !important;
+            }
+
+            th, td {
+                padding: 6px 8px !important;
+                font-size: 10px !important;
+                line-height: 1.2 !important;
+                color: #000000 !important;
+                border: 1px solid #000000 !important;
+            }
+
+            th {
+                background: #ffffff !important;
+                font-weight: 700 !important;
+                color: #000000 !important;
+            }
+
+            td:first-child {
+                background: #f0f0f0 !important;
+                font-weight: 700 !important;
+                color: #000000 !important;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            /* 列表样式优化 */
+            .print-only ul, .print-only ol {
+                margin: 5px 0 !important;
+                padding-left: 20px !important;
+            }
+
+            .print-only li {
+                font-size: 11px !important;
+                margin-bottom: 3px !important;
+                line-height: 1.3 !important;
+                color: #000000 !important;
+            }
+
+            /* 优化链接打印 */
+            a {
+                text-decoration: underline;
+                color: #000000 !important;
+                font-weight: 600 !important;
+            }
+
+            a[href]:after {
+                content: " (" attr(href) ")";
+                font-size: 0.7em;
+                word-break: break-all;
+            }
+
+            /* 页面设置 - 横向打印 */
+            @page {
+                margin: 1cm;
+                size: A4 landscape;
+            }
+
+            body {
+                background: white !important;
+                padding: 0 !important;
+                font-size: 11px !important;
+                color: #000000 !important;
+            }
+
+            /* 标题打印优化 */
+            .header h1 {
+                page-break-after: avoid;
+            }
+
+            /* 强制一页 */
+            .print-only, .print-only * {
+                page-break-before: avoid !important;
+                page-break-after: avoid !important;
+            }
+
+            /* 移除所有颜色,统一为黑白 */
+            .metric-value,
+            .metric-value.highlight,
+            .metric-value.jif,
+            .metric-value.sjr {
+                color: #000000 !important;
+            }
+
+            .journal-level {
+                background: #ffffff !important;
+                color: #000000 !important;
+                border: 1px solid #000000 !important;
+            }
+
+            .journal-jcr {
+                background: #ffffff !important;
+                color: #000000 !important;
+                border: 1px solid #000000 !important;
+                box-shadow: none !important;
+            }
+
+            .journal-jcr .sci-label,
+            .journal-jcr .jcr-label {
+                color: #000000 !important;
+            }
+        }
+
         .ai-modal-body {
             padding: 24px;
         }
@@ -715,6 +990,117 @@
         .ai-response strong {
             color: #2c3e50;
             font-weight: 600;
+        }
+
+        /* Markdown标题样式 */
+        .ai-response h1,
+        .ai-response h2,
+        .ai-response h3 {
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .ai-response h1 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid #eaeaea;
+            padding-bottom: 8px;
+        }
+
+        .ai-response h2 {
+            font-size: 1.3rem;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 6px;
+        }
+
+        .ai-response h3 {
+            font-size: 1.15rem;
+        }
+
+        /* Markdown列表样式 */
+        .ai-response ul,
+        .ai-response ol {
+            margin: 12px 0;
+            padding-left: 24px;
+        }
+
+        .ai-response li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .ai-response ul {
+            list-style-type: disc;
+        }
+
+        .ai-response ol {
+            list-style-type: decimal;
+        }
+
+        .ai-response li::marker {
+            color: #74b9ff;
+        }
+
+        /* Markdown表格样式 */
+        .ai-response table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .ai-response th,
+        .ai-response td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+            vertical-align: top;
+        }
+
+        .ai-response th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .ai-response tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ai-response tr:hover {
+            background: #f8f9fa;
+        }
+
+        .ai-response tr:nth-child(even) {
+            background: #fafbfc;
+        }
+
+        .ai-response tr:nth-child(even):hover {
+            background: #f0f2f5;
+        }
+
+        .ai-response td:first-child {
+            font-weight: 600;
+            color: #2c3e50;
+            background: #f8f9fa;
+            width: 120px;
+        }
+
+        .ai-response td a {
+            color: #74b9ff;
+            text-decoration: none;
+            border-bottom: 1px dotted #74b9ff;
+            transition: all 0.2s ease;
+        }
+
+        .ai-response td a:hover {
+            color: #5a9fd8;
+            border-bottom-style: solid;
         }
 
         .ai-modal-error {
@@ -794,7 +1180,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 1100;
+            z-index: 3100;
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -1227,6 +1613,27 @@
                     }
 
                     if (score > 0) {
+                        // 自动识别期刊领域
+                        let categoryType = journal.category_type || '';
+                        if (!categoryType) {
+                            const journalNameUpper = journal.name.toUpperCase();
+                            // 生物学与生命科学领域
+                            if (journalNameUpper.includes('BIOINFORMATICS')) {
+                                categoryType = '生物学与生命科学';
+                            }
+                            // 医学和健康领域
+                            else if (journalNameUpper.includes('OBESITY') ||
+                                     journalNameUpper.includes('REPRODUCTION') ||
+                                     journalNameUpper.includes('INFECTION') ||
+                                     journalNameUpper.includes('AUTOPHAGY') ||
+                                     journalNameUpper.includes('DIABET') ||
+                                     journalNameUpper.includes('NEUROINFLAMMATION') ||
+                                     journalNameUpper.includes('ALZHEIMERS') ||
+                                     journalNameUpper.includes('PHARMACOLOGY')) {
+                                categoryType = '医学和健康';
+                            }
+                        }
+
                         results.push({
                             name: journal.name,
                             displayName: matchedName, // 使用匹配到的名称显示
@@ -1238,7 +1645,8 @@
                             acronym: acronym,
                             organizer: journal.organizer || '',
                             supervisor: journal.supervisor || '',
-                            category_type: journal.category_type || ''
+                            category_type: categoryType,
+                            field: getJournalResearchField(journal.name, getJIFMetrics(journal.name), getSJRMetrics(journal.name))
                         });
                     }
                 }
@@ -1340,24 +1748,55 @@
                 //     extraInfo += `<div class="journal-info">🔤 缩写：${result.acronym.toUpperCase()}</div>`;
                 // }
 
-                // 添加备注
+                // 收集所有meta信息到一个容器中
+                const metaItems = [];
+
+                // 添加备注(JCR排名)
                 if (result.note) {
-                    extraInfo += `<div class="journal-note">📝 ${result.note}</div>`;
+                    metaItems.push(`<div class="journal-meta-item">📝 ${result.note}</div>`);
                 }
 
                 // 添加主要主办单位
                 if (result.organizer) {
-                    extraInfo += `<div class="journal-info">🏢 主办：${result.organizer}</div>`;
+                    metaItems.push(`<div class="journal-meta-item">🏢 主办：${result.organizer}</div>`);
                 }
 
                 // 添加主管单位
                 if (result.supervisor) {
-                    extraInfo += `<div class="journal-info">🏛️ 主管：${result.supervisor}</div>`;
+                    metaItems.push(`<div class="journal-meta-item">🏛️ 主管：${result.supervisor}</div>`);
                 }
 
-                // 添加类别
-                if (result.category_type) {
-                    extraInfo += `<div class="journal-info">📂 类别：${result.category_type}</div>`;
+                // 添加研究领域（基于期刊名称自动识别）
+                if (result.field) {
+                    metaItems.push(`<div class="journal-meta-item">🔬 领域：${result.field}</div>`);
+                }
+
+                // 如果有meta信息,创建统一容器
+                if (metaItems.length > 0) {
+                    extraInfo += `<div class="journal-meta-container">${metaItems.join('')}</div>`;
+                }
+
+                // 将SCI分类和JCR信息合并到一个标签中
+                let combinedTag = '';
+                let otherInfo = extraInfo;
+
+                // 从extraInfo中提取JCR信息并与SCI分类合并
+                if (result.note) {
+                    combinedTag = `<div class="journal-jcr">
+                        <span class="sci-label">${result.level}</span>
+                        <span class="jcr-label">📝 ${result.note}</span>
+                    </div>`;
+                    // 从extraInfo中移除JCR信息
+                    otherInfo = extraInfo.replace(/<div class="journal-meta-item">📝[^<]*<\/div>/, '');
+                    // 如果容器为空,移除整个容器
+                    otherInfo = otherInfo.replace(/<div class="journal-meta-container">\s*<\/div>/, '');
+                    // 清理多余的空行
+                    otherInfo = otherInfo.replace(/<div class="journal-meta-container">\s+/g, '<div class="journal-meta-container">');
+                } else {
+                    // 如果没有JCR信息,只显示SCI分类
+                    combinedTag = `<div class="journal-jcr">
+                        <span class="sci-label">${result.level}</span>
+                    </div>`;
                 }
 
                 html += `
@@ -1366,10 +1805,8 @@
                             <input type="checkbox" class="journal-checkbox" data-journal="${result.name}" onchange="toggleJournalSelection('${result.name}')">
                             <div class="journal-name">${result.displayName || result.name}</div>
                         </div>
-                        <div>
-                            <span class="journal-level">${result.level}</span>
-                        </div>
-                        ${extraInfo}
+                        ${combinedTag}
+                        ${otherInfo}
                     </div>
                 `;
             });
@@ -1437,33 +1874,67 @@
             displayJournals.forEach(journal => {
                 let extraInfo = '';
 
-                // 添加备注
+                // 收集所有meta信息到一个容器中
+                const metaItems = [];
+
+                // 添加备注(JCR排名)
                 if (journal.note) {
-                    extraInfo += `<div class="journal-note">📝 ${journal.note}</div>`;
+                    metaItems.push(`<div class="journal-meta-item">📝 ${journal.note}</div>`);
                 }
 
                 // 添加主要主办单位
                 if (journal.organizer) {
-                    extraInfo += `<div class="journal-info">🏢 主办：${journal.organizer}</div>`;
+                    metaItems.push(`<div class="journal-meta-item">🏢 主办：${journal.organizer}</div>`);
                 }
 
                 // 添加主管单位
                 if (journal.supervisor) {
-                    extraInfo += `<div class="journal-info">🏛️ 主管：${journal.supervisor}</div>`;
+                    metaItems.push(`<div class="journal-meta-item">🏛️ 主管：${journal.supervisor}</div>`);
                 }
 
-                // 添加类别
-                if (journal.category_type) {
-                    extraInfo += `<div class="journal-info">📂 类别：${journal.category_type}</div>`;
+                // 添加研究领域
+                const journalField = getJournalResearchField(
+                    journal.name,
+                    getJIFMetrics(journal.name),
+                    getSJRMetrics(journal.name)
+                );
+                if (journalField && journalField !== '其他') {
+                    metaItems.push(`<div class="journal-meta-item">🔬 领域：${journalField}</div>`);
+                }
+
+                // 如果有meta信息,创建统一容器
+                if (metaItems.length > 0) {
+                    extraInfo += `<div class="journal-meta-container">${metaItems.join('')}</div>`;
+                }
+
+                // 将SCI分类和JCR信息合并到一个标签中
+                let combinedTag = '';
+                let otherInfo = extraInfo;
+
+                // 从extraInfo中提取JCR信息并与SCI分类合并
+                if (journal.note) {
+                    combinedTag = `<div class="journal-jcr">
+                        <span class="sci-label">${levelDisplayName}</span>
+                        <span class="jcr-label">📝 ${journal.note}</span>
+                    </div>`;
+                    // 从extraInfo中移除JCR信息
+                    otherInfo = extraInfo.replace(/<div class="journal-meta-item">📝[^<]*<\/div>/, '');
+                    // 如果容器为空,移除整个容器
+                    otherInfo = otherInfo.replace(/<div class="journal-meta-container">\s*<\/div>/, '');
+                    // 清理多余的空行
+                    otherInfo = otherInfo.replace(/<div class="journal-meta-container">\s+/g, '<div class="journal-meta-container">');
+                } else {
+                    // 如果没有JCR信息,只显示SCI分类
+                    combinedTag = `<div class="journal-jcr">
+                        <span class="sci-label">${levelDisplayName}</span>
+                    </div>`;
                 }
 
                 html += `
                     <div class="result-item">
                         <div class="journal-name">${journal.name}</div>
-                        <div>
-                            <span class="journal-level">${levelDisplayName}</span>
-                        </div>
-                        ${extraInfo}
+                        ${combinedTag}
+                        ${otherInfo}
                     </div>
                 `;
             });
@@ -1703,6 +2174,27 @@
                     );
 
                     if (journalField === fieldName) {
+                        // 自动识别期刊领域
+                        let categoryType = journal.category_type || '';
+                        if (!categoryType) {
+                            const journalNameUpper = journal.name.toUpperCase();
+                            // 生物学与生命科学领域
+                            if (journalNameUpper.includes('BIOINFORMATICS')) {
+                                categoryType = '生物学与生命科学';
+                            }
+                            // 医学和健康领域
+                            else if (journalNameUpper.includes('OBESITY') ||
+                                     journalNameUpper.includes('REPRODUCTION') ||
+                                     journalNameUpper.includes('INFECTION') ||
+                                     journalNameUpper.includes('AUTOPHAGY') ||
+                                     journalNameUpper.includes('DIABET') ||
+                                     journalNameUpper.includes('NEUROINFLAMMATION') ||
+                                     journalNameUpper.includes('ALZHEIMERS') ||
+                                     journalNameUpper.includes('PHARMACOLOGY')) {
+                                categoryType = '医学和健康';
+                            }
+                        }
+
                         allResults.push({
                             name: journal.name,
                             displayName: journal.name,
@@ -1713,7 +2205,7 @@
                             note: journal.note || '',
                             organizer: journal.organizer || '',
                             supervisor: journal.supervisor || '',
-                            category_type: journal.category_type || ''
+                            category_type: categoryType
                         });
                     }
                 });
@@ -1757,6 +2249,27 @@
                         );
 
                         if (journalField === selectedField) {
+                            // 自动识别期刊领域
+                            let categoryType = journal.category_type || '';
+                            if (!categoryType) {
+                                const journalNameUpper = journal.name.toUpperCase();
+                                // 生物学与生命科学领域
+                                if (journalNameUpper.includes('BIOINFORMATICS')) {
+                                    categoryType = '生物学与生命科学';
+                                }
+                                // 医学和健康领域
+                                else if (journalNameUpper.includes('OBESITY') ||
+                                         journalNameUpper.includes('REPRODUCTION') ||
+                                         journalNameUpper.includes('INFECTION') ||
+                                         journalNameUpper.includes('AUTOPHAGY') ||
+                                         journalNameUpper.includes('DIABET') ||
+                                         journalNameUpper.includes('NEUROINFLAMMATION') ||
+                                         journalNameUpper.includes('ALZHEIMERS') ||
+                                         journalNameUpper.includes('PHARMACOLOGY')) {
+                                    categoryType = '医学和健康';
+                                }
+                            }
+
                             allResults.push({
                                 name: journal.name,
                                 displayName: journal.name,
@@ -1767,7 +2280,7 @@
                                 note: journal.note || '',
                                 organizer: journal.organizer || '',
                                 supervisor: journal.supervisor || '',
-                                category_type: journal.category_type || ''
+                                category_type: categoryType
                             });
                         }
                     } else {
@@ -1777,6 +2290,27 @@
                             getJIFMetrics(journal.name),
                             getSJRMetrics(journal.name)
                         );
+
+                        // 自动识别期刊领域
+                        let categoryType = journal.category_type || '';
+                        if (!categoryType) {
+                            const journalNameUpper = journal.name.toUpperCase();
+                            // 生物学与生命科学领域
+                            if (journalNameUpper.includes('BIOINFORMATICS')) {
+                                categoryType = '生物学与生命科学';
+                            }
+                            // 医学和健康领域
+                            else if (journalNameUpper.includes('OBESITY') ||
+                                     journalNameUpper.includes('REPRODUCTION') ||
+                                     journalNameUpper.includes('INFECTION') ||
+                                     journalNameUpper.includes('AUTOPHAGY') ||
+                                     journalNameUpper.includes('DIABET') ||
+                                     journalNameUpper.includes('NEUROINFLAMMATION') ||
+                                     journalNameUpper.includes('ALZHEIMERS') ||
+                                     journalNameUpper.includes('PHARMACOLOGY')) {
+                                categoryType = '医学和健康';
+                            }
+                        }
 
                         allResults.push({
                             name: journal.name,
@@ -1788,7 +2322,7 @@
                             note: journal.note || '',
                             organizer: journal.organizer || '',
                             supervisor: journal.supervisor || '',
-                            category_type: journal.category_type || ''
+                            category_type: categoryType
                         });
                     }
                 });
@@ -1820,6 +2354,27 @@
 
             for (const [category, journals] of Object.entries(journalsData)) {
                 journals.forEach(journal => {
+                    // 自动识别期刊领域
+                    let categoryType = journal.category_type || '';
+                    if (!categoryType) {
+                        const journalNameUpper = journal.name.toUpperCase();
+                        // 生物学与生命科学领域
+                        if (journalNameUpper.includes('BIOINFORMATICS')) {
+                            categoryType = '生物学与生命科学';
+                        }
+                        // 医学和健康领域
+                        else if (journalNameUpper.includes('OBESITY') ||
+                                 journalNameUpper.includes('REPRODUCTION') ||
+                                 journalNameUpper.includes('INFECTION') ||
+                                 journalNameUpper.includes('AUTOPHAGY') ||
+                                 journalNameUpper.includes('DIABET') ||
+                                 journalNameUpper.includes('NEUROINFLAMMATION') ||
+                                 journalNameUpper.includes('ALZHEIMERS') ||
+                                 journalNameUpper.includes('PHARMACOLOGY')) {
+                            categoryType = '医学和健康';
+                        }
+                    }
+
                     allResults.push({
                         name: journal.name,
                         displayName: journal.name,
@@ -1828,7 +2383,8 @@
                         note: journal.note || '',
                         organizer: journal.organizer || '',
                         supervisor: journal.supervisor || '',
-                        category_type: journal.category_type || ''
+                        category_type: categoryType,
+                        field: getJournalResearchField(journal.name, getJIFMetrics(journal.name), getSJRMetrics(journal.name))
                     });
                 });
             }
@@ -1857,7 +2413,12 @@
         <div class="compare-content">
             <div class="compare-header">
                 <h2 class="compare-title">期刊对比报告</h2>
-                <button class="compare-close" onclick="closeCompareModal()">关闭</button>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button class="save-pdf-btn" onclick="saveCompareAsPdf()">
+                        📄 保存PDF
+                    </button>
+                    <button class="compare-close" onclick="closeCompareModal()">关闭</button>
+                </div>
             </div>
             <div id="compareTableContainer"></div>
         </div>
@@ -1868,7 +2429,12 @@
         <div class="ai-modal-content">
             <div class="ai-modal-header">
                 <h2 class="ai-modal-title" id="aiModalTitle">期刊AI评价</h2>
-                <button class="ai-modal-close" onclick="closeAiModal()">&times;</button>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button class="save-pdf-btn" onclick="saveAiModalAsPdf()" id="saveAiPdfBtn" style="display: none;">
+                        📄 保存PDF
+                    </button>
+                    <button class="ai-modal-close" onclick="closeAiModal()">&times;</button>
+                </div>
             </div>
             <div class="ai-modal-body" id="aiModalBody">
                 <div class="ai-loading">
@@ -2054,49 +2620,47 @@
 
 ${journalInfo}
 
-请重点回答以下问题（用中文，简洁直接）：
+⚠️ **重要任务：数据核验**
+请务必查询并核对以下关键指标，与网页提供的信息进行比对：
+1. **最新影响因子**：请查询官方来源（如Journal Citation Reports, 期刊官网）的2024年最新影响因子，核对是否为 ${jif?.jif_2024 || 'N/A'}
+2. **版面费（APC）**：请查询期刊官网的Author Guidelines或Submission页面，核对版面费是否为 $${sjr?.apc_usd || 'N/A'}
+3. 如果发现数据不一致，请明确指出，并提供您查到的准确数据
+4. 请说明您的数据来源（如期刊官网、JCR等）
 
-**一、期刊档次与水平**
-- 影响因子${jif?.jif_2024 || 'N/A'}在同类期刊中处于什么水平？值得投吗？
-- 分区${jif?.jif_quartile || 'N/A'}代表了什么学术地位？
+**输出格式要求：**
+请以**表格形式**输出评价结果，包含以下列：
+| 评价维度 | 详细分析 | 数据核验结果 |
+|---------|---------|------------|
 
-**二、审稿周期（非常重要！）**
-- 根据年发文量${sjr?.total_docs || 'N/A'}，推测审稿速度快慢？
-- 是"秒投秒拒"还是"漫长等待"？
+表格行包括：
+1. 期刊档次与水平
+2. 审稿周期
+3. 国人发文占比
+4. 口碑与争议
+5. 性价比分析
+6. 官方投稿信息（含网址链接）
+7. 最终建议（推荐/谨慎/不推荐）
 
-**三、国人发文占比**
-- ${jif?.publisher || '该出版社'}对国人友好吗？
-- 中国学者在这本期刊的发文占比大概多少？
+**表格最后一行"最终建议"要求：**
+- 给出明确结论："推荐/谨慎/不推荐"
+- 如果数据有差异,在结论中特别说明
 
-**四、口碑与争议**
-- 这本期刊在学术圈的口碑如何？
-- 有没有争议（如预警名单、灌水嫌疑等）？
-- ${jif?.jci || 'N/A'}的JCI值说明了什么质量问题？
-
-**五、性价比分析**
-- 版面费$${sjr?.apc_usd || 'N/A'}（约¥${Math.round((sjr?.apc_usd || 0) * 7.2)}）值得吗？
-- 综合考虑学术价值和费用，推荐度多少？
-
-**六、官方投稿信息（重要！）**
-- 请提供该期刊的官方网址（官方网站链接）
-- 请说明如何从官方渠道获取最新的投稿指南和要求
-- 提醒务必通过官方渠道投稿，警惕虚假投稿网站
-
-**七、最终建议**
-- 用一句话总结：适不适合投？给个明确的"推荐/谨慎/不推荐"
-
-要求：
-1. 用大白话，不要官腔
-2. 数字说话，要有具体判断
-3. 有争议直接说，不要回避
-4. 必须提供准确的官方网址（如果知道的话）
-5. 最后给出明确的"推荐/谨慎/不推荐"结论`;
+**注意事项：**
+1. 表格内容要简洁直接,用大白话
+2. 数字说话,要有具体判断
+3. 有争议直接说,不要回避
+4. "数据核验结果"列必须说明数据是否一致,如不一致请提供准确数据
+5. 官方投稿信息必须提供可点击的网址链接(用Markdown格式[网址](URL))
+6. 表格后可以补充简要说明,但主要信息都在表格中`;
 
                 // 调用GLM-4.7 API
                 const response = await callGLM47API(prompt);
 
                 // 显示AI回复
                 body.innerHTML = `<div class="ai-response">${formatAIResponse(response)}</div>`;
+
+                // 显示保存PDF按钮
+                document.getElementById('saveAiPdfBtn').style.display = 'inline-flex';
 
             } catch (error) {
                 console.error('AI评价失败:', error);
@@ -2142,43 +2706,38 @@ ${journalInfo}
 
 ${journalInfo}
 
-请重点回答以下问题（用中文，简洁直接）：
+⚠️ **重要任务：数据核验**
+请务必查询并核对以下关键指标，与网页提供的信息进行比对：
+1. **最新影响因子**：请查询官方来源（如Journal Citation Reports, 期刊官网）的2024年最新影响因子，核对是否为 ${jif?.jif_2024 || 'N/A'}
+2. **版面费（APC）**：请查询期刊官网的Author Guidelines或Submission页面，核对版面费是否为 $${sjr?.apc_usd || 'N/A'}
+3. 如果发现数据不一致，请明确指出，并提供您查到的准确数据
+4. 请说明您的数据来源（如期刊官网、JCR等）
 
-**一、期刊档次与水平**
-- 影响因子${jif?.jif_2024 || 'N/A'}在同类期刊中处于什么水平？值得投吗？
-- 分区${jif?.jif_quartile || 'N/A'}代表了什么学术地位？
+**输出格式要求：**
+请以**表格形式**输出评价结果，包含以下列：
+| 评价维度 | 详细分析 | 数据核验结果 |
+|---------|---------|------------|
 
-**二、审稿周期（非常重要！）**
-- 根据年发文量${sjr?.total_docs || 'N/A'}，推测审稿速度快慢？
-- 是"秒投秒拒"还是"漫长等待"？
+表格行包括：
+1. 期刊档次与水平
+2. 审稿周期
+3. 国人发文占比
+4. 口碑与争议
+5. 性价比分析
+6. 官方投稿信息（含网址链接）
+7. 最终建议（推荐/谨慎/不推荐）
 
-**三、国人发文占比**
-- ${jif?.publisher || '该出版社'}对国人友好吗？
-- 中国学者在这本期刊的发文占比大概多少？
+**表格最后一行"最终建议"要求：**
+- 给出明确结论："推荐/谨慎/不推荐"
+- 如果数据有差异,在结论中特别说明
 
-**四、口碑与争议**
-- 这本期刊在学术圈的口碑如何？
-- 有没有争议（如预警名单、灌水嫌疑等）？
-- ${jif?.jci || 'N/A'}的JCI值说明了什么质量问题？
-
-**五、性价比分析**
-- 版面费$${sjr?.apc_usd || 'N/A'}（约¥${Math.round((sjr?.apc_usd || 0) * 7.2)}）值得吗？
-- 综合考虑学术价值和费用，推荐度多少？
-
-**六、官方投稿信息（重要！）**
-- 请提供该期刊的官方网址（官方网站链接）
-- 请说明如何从官方渠道获取最新的投稿指南和要求
-- 提醒务必通过官方渠道投稿，警惕虚假投稿网站
-
-**七、最终建议**
-- 用一句话总结：适不适合投？给个明确的"推荐/谨慎/不推荐"
-
-要求：
-1. 用大白话，不要官腔
-2. 数字说话，要有具体判断
-3. 有争议直接说，不要回避
-4. 必须提供准确的官方网址（如果知道的话）
-5. 最后给出明确的"推荐/谨慎/不推荐"结论`;
+**注意事项：**
+1. 表格内容要简洁直接,用大白话
+2. 数字说话,要有具体判断
+3. 有争议直接说,不要回避
+4. "数据核验结果"列必须说明数据是否一致,如不一致请提供准确数据
+5. 官方投稿信息必须提供可点击的网址链接(用Markdown格式[网址](URL))
+6. 表格后可以补充简要说明,但主要信息都在表格中`;
 
             body.innerHTML = `
                 <div style="padding: 20px;">
@@ -2381,13 +2940,196 @@ ${journalInfo}
         });
 
         function formatAIResponse(text) {
-            // 简单的Markdown格式化
-            return text
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\n\n/g, '</p><p>')
-                .replace(/\n/g, '<br>')
-                .replace(/^/, '<p>')
-                .replace(/$/, '</p>');
+            // 增强的Markdown格式化,支持表格
+            let lines = text.split('\n');
+            let formatted = '';
+            let inTable = false;
+            let inList = false;
+            let inParagraph = false;
+
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i];
+
+                // 跳过空行
+                if (line.trim() === '') {
+                    if (inParagraph) {
+                        formatted += '</p>';
+                        inParagraph = false;
+                    }
+                    if (inList) {
+                        formatted += '</ul>';
+                        inList = false;
+                    }
+                    if (inTable) {
+                        formatted += '</table>';
+                        inTable = false;
+                    }
+                    continue;
+                }
+
+                // 处理Markdown表格
+                if (line.trim().startsWith('|') && line.trim().endsWith('|')) {
+                    // 关闭之前的标签
+                    if (inParagraph) {
+                        formatted += '</p>';
+                        inParagraph = false;
+                    }
+                    if (inList) {
+                        formatted += '</ul>';
+                        inList = false;
+                    }
+
+                    // 判断是否是表格分隔线 (|---|---|)
+                    if (line.match(/^\|?\s*:?-+:?\s*\|.*$/)) {
+                        continue; // 跳过分隔线
+                    }
+
+                    // 开始新表格
+                    if (!inTable) {
+                        formatted += '<table>';
+                        inTable = true;
+                    }
+
+                    // 解析表格行
+                    let cells = line.split('|').filter((cell, index, arr) => {
+                        // 移除首尾的空元素
+                        return index > 0 && index < arr.length;
+                    });
+
+                    // 判断是否是表头(下一行是分隔线)
+                    let isHeader = false;
+                    if (i + 1 < lines.length && lines[i + 1].match(/^\|?\s*:?-+:?\s*\|/)) {
+                        isHeader = true;
+                    }
+
+                    formatted += isHeader ? '<thead><tr>' : '<tr>';
+
+                    cells.forEach(cell => {
+                        cell = cell.trim();
+                        // 处理行内格式
+                        cell = processInlineFormatting(cell);
+                        formatted += isHeader ? `<th>${cell}</th>` : `<td>${cell}</td>`;
+                    });
+
+                    formatted += isHeader ? '</tr></thead><tbody>' : '</tr>';
+                    continue;
+                }
+
+                // 表格结束
+                if (inTable && !line.trim().startsWith('|')) {
+                    formatted += '</tbody></table>';
+                    inTable = false;
+                }
+
+                // 处理标题
+                if (line.startsWith('### ')) {
+                    if (inParagraph) formatted += '</p>';
+                    if (inList) formatted += '</ul>';
+                    inParagraph = false;
+                    inList = false;
+                    formatted += '<h3>' + processInlineFormatting(line.substring(4)) + '</h3>';
+                    continue;
+                }
+                if (line.startsWith('## ')) {
+                    if (inParagraph) formatted += '</p>';
+                    if (inList) formatted += '</ul>';
+                    inParagraph = false;
+                    inList = false;
+                    formatted += '<h2>' + processInlineFormatting(line.substring(3)) + '</h2>';
+                    continue;
+                }
+                if (line.startsWith('# ')) {
+                    if (inParagraph) formatted += '</p>';
+                    if (inList) formatted += '</ul>';
+                    inParagraph = false;
+                    inList = false;
+                    formatted += '<h1>' + processInlineFormatting(line.substring(2)) + '</h1>';
+                    continue;
+                }
+
+                // 处理列表项
+                if (line.match(/^[\-\*]\s/) || line.match(/^\d+\.\s/)) {
+                    if (inParagraph) {
+                        formatted += '</p>';
+                        inParagraph = false;
+                    }
+                    if (!inList) {
+                        formatted += '<ul>';
+                        inList = true;
+                    }
+                    // 移除列表标记
+                    let itemText = line.replace(/^[\-\*]\s/, '').replace(/^\d+\.\s/, '');
+                    // 处理粗体和链接
+                    itemText = processInlineFormatting(itemText);
+                    formatted += '<li>' + itemText + '</li>';
+                    continue;
+                }
+
+                // 处理普通段落
+                if (!inParagraph) {
+                    formatted += '<p>';
+                    inParagraph = true;
+                } else {
+                    formatted += '<br>';
+                }
+
+                // 处理粗体和链接
+                line = processInlineFormatting(line);
+                formatted += line;
+            }
+
+            // 关闭未闭合的标签
+            if (inParagraph) formatted += '</p>';
+            if (inList) formatted += '</ul>';
+            if (inTable) formatted += '</tbody></table>';
+
+            return formatted;
+        }
+
+        // 处理行内格式化(粗体、链接等)
+        function processInlineFormatting(text) {
+            // 先处理粗体 **text**
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+            // 标记已处理的链接,避免重复处理
+            const processedLinks = [];
+
+            // 处理Markdown链接格式 [文本](URL)
+            text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(match, linkText, url) {
+                // 清理URL中的可能的空格
+                url = url.trim();
+                linkText = linkText.trim();
+                const linkHtml = `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: #74b9ff; text-decoration: none; border-bottom: 1px dotted #74b9ff;">${linkText}</a>`;
+                // 标记这个链接已处理
+                processedLinks.push(url);
+                return linkHtml;
+            });
+
+            // 处理纯URL链接(没有被Markdown链接包裹的)
+            // 匹配 http://, https://, www. 开头的网址
+            const urlRegex = /(https?:\/\/[^\s<>()\[\]"{}|\\^`]+|www\.[^\s<>()\[\]"{}|\\^`]+)/g;
+            text = text.replace(urlRegex, function(url) {
+                // 如果这个URL已经被Markdown链接处理过,跳过
+                if (processedLinks.includes(url)) return url;
+
+                // 如果URL已经包含在HTML标签中,跳过
+                if (url.includes('<') || url.includes('>')) return url;
+
+                // 确保URL有完整的协议
+                let href = url;
+                if (url.startsWith('www.')) {
+                    href = 'http://' + url;
+                }
+
+                // 限制链接文本长度,避免过长
+                let displayUrl = url;
+                if (displayUrl.length > 50) {
+                    displayUrl = displayUrl.substring(0, 47) + '...';
+                }
+                return `<a href="${href}" target="_blank" rel="noopener noreferrer" style="color: #74b9ff; text-decoration: none; border-bottom: 1px dotted #74b9ff;">${displayUrl}</a>`;
+            });
+
+            return text;
         }
 
         // 生成对比报告
@@ -2435,7 +3177,7 @@ ${journalInfo}
             tableHtml += '<thead><tr>';
             tableHtml += '<th>指标</th>';
             journalData.forEach(j => {
-                tableHtml += `<th>${j.name}</th>`;
+                tableHtml += `<th><a href="javascript:void(0)" onclick="showAiModal('${j.name}')" style="color: #2c3e50; text-decoration: none; font-weight: 500;">${j.name}</a></th>`;
             });
             tableHtml += '</tr></thead><tbody>';
 
@@ -2614,6 +3356,155 @@ ${journalInfo}
                 closeApiSettings();
             }
         });
+
+        // 保存AI评价为PDF
+        function saveAiModalAsPdf() {
+            // 获取当前期刊名称
+            const journalName = document.getElementById('aiModalTitle').textContent.replace('期刊AI评价 - ', '');
+
+            // 创建打印容器
+            const printContainer = document.createElement('div');
+            printContainer.className = 'print-only';
+            printContainer.id = 'print-temp-container';
+            printContainer.style.padding = '10px';
+            printContainer.style.background = 'white';
+
+            // 添加标题
+            const title = document.createElement('h1');
+            title.textContent = `期刊AI评价 - ${journalName}`;
+            title.style.fontSize = '16px';
+            title.style.marginBottom = '5px';
+            title.style.marginTop = '0';
+            title.style.color = '#2c3e50';
+            printContainer.appendChild(title);
+
+            // 添加生成日期
+            const date = document.createElement('p');
+            date.textContent = `生成时间: ${new Date().toLocaleString()}`;
+            date.style.fontSize = '10px';
+            date.style.color = '#7f8c8d';
+            date.style.marginBottom = '10px';
+            printContainer.appendChild(date);
+
+            // 克隆AI评价内容
+            const aiResponse = document.querySelector('.ai-modal-body .ai-response');
+            if (aiResponse) {
+                const clonedContent = aiResponse.cloneNode(true);
+                printContainer.appendChild(clonedContent);
+            }
+
+            // 添加到body开头
+            document.body.insertBefore(printContainer, document.body.firstChild);
+
+            // 临时修改标题以便打印时显示
+            const originalTitle = document.title;
+            document.title = `期刊评价_${journalName}_${new Date().toLocaleDateString().replace(/\//g, '-')}`;
+
+            // 调用打印
+            window.print();
+
+            // 打印后恢复
+            setTimeout(() => {
+                document.title = originalTitle;
+                if (document.body.contains(printContainer)) {
+                    document.body.removeChild(printContainer);
+                }
+            }, 100);
+        }
+
+        // 保存对比报告为PDF
+        function saveCompareAsPdf() {
+            // 获取对比的期刊名称
+            const journals = Array.from(selectedJournals);
+            const journalNames = journals.join('_vs_');
+
+            // 创建打印容器
+            const printContainer = document.createElement('div');
+            printContainer.className = 'print-only';
+            printContainer.id = 'print-temp-container';
+            printContainer.style.padding = '10px';
+            printContainer.style.background = 'white';
+
+            // 添加标题
+            const title = document.createElement('h1');
+            title.textContent = `期刊对比报告`;
+            title.style.fontSize = '16px';
+            title.style.marginBottom = '5px';
+            title.style.marginTop = '0';
+            title.style.color = '#2c3e50';
+            printContainer.appendChild(title);
+
+            // 添加生成日期
+            const date = document.createElement('p');
+            date.textContent = `生成时间: ${new Date().toLocaleString()}`;
+            date.style.fontSize = '10px';
+            date.style.color = '#7f8c8d';
+            date.style.marginBottom = '10px';
+            printContainer.appendChild(date);
+
+            // 克隆表格并移除emoji和链接
+            const container = document.getElementById('compareTableContainer');
+            if (container) {
+                const table = container.querySelector('table');
+                if (table) {
+                    const clonedTable = table.cloneNode(true);
+
+                    // 移除所有emoji表情符号
+                    const emojiRegex = /[\u{1F300}-\u{1F9FF}|\u{2600}-\u{26FF}|\u{2700}-\u{27BF}]/gu;
+                    removeEmojiFromElement(clonedTable, emojiRegex);
+
+                    // 将链接转换为纯文本(避免显示javascript:void(0))
+                    convertLinksToText(clonedTable);
+
+                    printContainer.appendChild(clonedTable);
+                }
+            }
+
+            // 添加到body开头
+            document.body.insertBefore(printContainer, document.body.firstChild);
+
+            // 临时修改标题以便打印时显示
+            const originalTitle = document.title;
+            document.title = `期刊对比_${journalNames}_${new Date().toLocaleDateString().replace(/\//g, '-')}`;
+
+            // 调用打印
+            window.print();
+
+            // 打印后恢复
+            setTimeout(() => {
+                document.title = originalTitle;
+                if (document.body.contains(printContainer)) {
+                    document.body.removeChild(printContainer);
+                }
+            }, 100);
+        }
+
+        // 递归移除元素中的emoji
+        function removeEmojiFromElement(element, regex) {
+            // 处理文本节点
+            for (let i = element.childNodes.length - 1; i >= 0; i--) {
+                const child = element.childNodes[i];
+
+                if (child.nodeType === Node.TEXT_NODE) {
+                    // 移除文本中的emoji
+                    const text = child.textContent.replace(regex, '');
+                    child.textContent = text;
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                    // 递归处理子元素
+                    removeEmojiFromElement(child, regex);
+                }
+            }
+        }
+
+        // 将表格中的链接转换为纯文本(用于打印)
+        function convertLinksToText(table) {
+            const links = table.querySelectorAll('a');
+            links.forEach(link => {
+                const text = link.textContent;
+                const textNode = document.createTextNode(text);
+                link.parentNode.replaceChild(textNode, link);
+            });
+        }
     </script>
 </body>
 </html>
