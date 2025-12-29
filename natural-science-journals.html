@@ -94,6 +94,78 @@
             font-weight: 400;
         }
 
+        .field-filter {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #eaeaea;
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .filter-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .filter-clear {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s ease;
+        }
+
+        .filter-clear:hover {
+            background: #c0392b;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .field-option {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #eaeaea;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            color: #5a6c7d;
+        }
+
+        .field-option:hover {
+            border-color: #74b9ff;
+            background: #f0f8ff;
+        }
+
+        .field-option.active {
+            border-color: #74b9ff;
+            background: #e3f2fd;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .field-option .field-icon {
+            font-size: 1.1rem;
+        }
+
         .results {
             background: white;
             border-radius: 12px;
@@ -548,6 +620,19 @@
             <div class="search-tips">
                 💡 提示：支持期刊名称、首字母缩写（如 JACS）、缩写片段（如 "mol can" 搜 "Molecular Cancer"）、前缀等多种搜索方式，系统会自动匹配
             </div>
+
+            <!-- 研究领域筛选器 -->
+            <div class="field-filter" id="fieldFilter">
+                <div class="filter-header">
+                    <span class="filter-title">🔬 研究领域筛选</span>
+                    <button class="filter-clear" onclick="clearFieldFilter()" id="clearFieldBtn" style="display: none;">
+                        ✕ 清除筛选
+                    </button>
+                </div>
+                <div class="filter-options" id="fieldOptions">
+                    <!-- 研究领域选项将由 JavaScript 动态生成 -->
+                </div>
+            </div>
         </div>
 
         <div class="results" id="results"></div>
@@ -594,6 +679,8 @@
     <script src="journals.js"></script>
     <script src="sjr_metrics.js"></script>
     <script src="jif_metrics.js"></script>
+    <script src="oa_journals.js"></script>
+    <script src="research_fields.js"></script>
     <script>
         let dataLoaded = false;
         let sjrData = {};
@@ -859,8 +946,12 @@
                         jifExtra += `<span>总引用: ${Number(jifMetrics.total_cites).toLocaleString()}</span>`;
                     }
 
+                    // 判断 OA 类型
+                    const oaType = getOAJournalType(jifMetrics.publisher || '', result.name);
+                    const oaIcon = getOAIcon(oaType);
+
                     extraInfo += `<div class="jif-metrics">
-                        ${jifMetrics.jif_2024 ? `<div class="jif-main">📈 JIF (2024): <strong>${jifMetrics.jif_2024}</strong></div>` : ''}
+                        ${jifMetrics.jif_2024 ? `<div class="jif-main">📈 JIF (2024): <strong>${jifMetrics.jif_2024}</strong> ${oaIcon}</div>` : ''}
                         ${jifDetails ? `<div class="jif-details">${jifDetails}</div>` : ''}
                         ${jifMetrics.five_year_jif ? `<div class="jif-details">
                             <span>5-Year JIF: ${jifMetrics.five_year_jif}</span>
@@ -1069,11 +1160,147 @@
                 loadJournals();
                 loadSJRData();
                 loadJIFData();
+                initializeFieldFilter();
             });
         } else {
             loadJournals();
             loadSJRData();
             loadJIFData();
+            initializeFieldFilter();
+        }
+
+        // 当前选中的研究领域筛选
+        let selectedField = null;
+
+        // 初始化研究领域筛选器
+        function initializeFieldFilter() {
+            const fieldOptionsContainer = document.getElementById('fieldOptions');
+            const fields = getAllResearchFields();
+
+            // 生成研究领域选项
+            let optionsHtml = '';
+            fields.forEach(field => {
+                optionsHtml += `
+                    <div class="field-option" data-field="${field.name}" onclick="selectField('${field.name}')">
+                        <span class="field-icon">${field.icon}</span>
+                        <span>${field.name}</span>
+                    </div>
+                `;
+            });
+
+            fieldOptionsContainer.innerHTML = optionsHtml;
+        }
+
+        // 选择研究领域
+        function selectField(fieldName) {
+            const clearBtn = document.getElementById('clearFieldBtn');
+            const options = document.querySelectorAll('.field-option');
+
+            if (selectedField === fieldName) {
+                // 取消选择
+                selectedField = null;
+                options.forEach(opt => opt.classList.remove('active'));
+                clearBtn.style.display = 'none';
+
+                // 重新执行搜索（无筛选）
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput.value.trim()) {
+                    performSearch(searchInput.value);
+                }
+            } else {
+                // 选择新的研究领域
+                selectedField = fieldName;
+
+                // 更新UI
+                options.forEach(opt => {
+                    if (opt.dataset.field === fieldName) {
+                        opt.classList.add('active');
+                    } else {
+                        opt.classList.remove('active');
+                    }
+                });
+                clearBtn.style.display = 'block';
+
+                // 执行筛选搜索
+                filterByField(fieldName);
+            }
+        }
+
+        // 清除研究领域筛选
+        function clearFieldFilter() {
+            selectedField = null;
+            const options = document.querySelectorAll('.field-option');
+            options.forEach(opt => opt.classList.remove('active'));
+            document.getElementById('clearFieldBtn').style.display = 'none';
+
+            // 重新执行搜索（无筛选）
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput.value.trim()) {
+                performSearch(searchInput.value);
+            } else {
+                // 如果搜索框为空，显示所有期刊
+                showAllJournals();
+            }
+        }
+
+        // 按研究领域筛选期刊
+        function filterByField(fieldName) {
+            if (!dataLoaded) return;
+
+            const allResults = [];
+
+            // 遍历所有分类的所有期刊
+            for (const [category, journals] of Object.entries(journalsData)) {
+                journals.forEach(journal => {
+                    const journalField = getJournalResearchField(
+                        journal.name,
+                        getJIFMetrics(journal.name),
+                        getSJRMetrics(journal.name)
+                    );
+
+                    if (journalField === fieldName) {
+                        allResults.push({
+                            name: journal.name,
+                            level: levelMap[category] || category,
+                            originalCategory: category,
+                            matchType: 'field',
+                            field: journalField
+                        });
+                    }
+                });
+            }
+
+            // 显示结果
+            displayResults(allResults);
+
+            // 显示统计信息
+            const resultsDiv = document.getElementById('results');
+            const statsHtml = `
+                <div class="result-stats" style="padding: 10px 20px; background: #f0f8ff; border-radius: 6px; margin-bottom: 20px;">
+                    <strong>🔬 ${fieldName}</strong>：找到 ${allResults.length.toLocaleString()} 种期刊
+                </div>
+            `;
+
+            resultsDiv.insertAdjacentHTML('afterbegin', statsHtml);
+        }
+
+        // 显示所有期刊（无筛选）
+        function showAllJournals() {
+            if (!dataLoaded) return;
+
+            const allResults = [];
+
+            for (const [category, journals] of Object.entries(journalsData)) {
+                journals.forEach(journal => {
+                    allResults.push({
+                        name: journal.name,
+                        level: levelMap[category] || category,
+                        originalCategory: category
+                    });
+                });
+            }
+
+            displayResults(allResults);
         }
     </script>
 
@@ -1184,10 +1411,32 @@
 
             // 获取每个期刊的详细数据
             const journalData = journals.map(name => {
+                const jif = getJIFMetrics(name);
+                const sjr = getSJRMetrics(name);
+
+                // 获取水平分类（从搜索结果中）
+                let level = '未知';
+                searchResults.forEach(result => {
+                    if (result.name === name && result.level) {
+                        level = result.level;
+                    }
+                });
+
+                // 判断 OA 类型
+                const oaType = jif ? getOAJournalType(jif.publisher || '', name) : '未知';
+
+                // 获取研究领域
+                const field = getJournalResearchField(name, jif, sjr);
+                const fieldInfo = getResearchFieldInfo(field);
+
                 return {
                     name: name,
-                    jif: getJIFMetrics(name),
-                    sjr: getSJRMetrics(name)
+                    level: level,
+                    jif: jif,
+                    sjr: sjr,
+                    oaType: oaType,
+                    researchField: field,
+                    fieldIcon: fieldInfo.icon
                 };
             });
 
@@ -1201,6 +1450,31 @@
                 tableHtml += `<th>${j.name}</th>`;
             });
             tableHtml += '</tr></thead><tbody>';
+
+            // 研究领域（新增，放在最前面）
+            tableHtml += '<tr>';
+            tableHtml += '<td>🔬 研究领域</td>';
+            journalData.forEach(j => {
+                tableHtml += `<td class="metric-value highlight">${j.fieldIcon} ${j.researchField}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // 水平分类（新增）
+            tableHtml += '<tr>';
+            tableHtml += '<td>🏅 水平分类</td>';
+            journalData.forEach(j => {
+                tableHtml += `<td class="metric-value highlight">${j.level}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // OA 类型（新增）
+            tableHtml += '<tr>';
+            tableHtml += '<td>📖 OA类型</td>';
+            journalData.forEach(j => {
+                const oaIcon = getOAIcon(j.oaType);
+                tableHtml += `<td class="metric-value">${oaIcon}</td>`;
+            });
+            tableHtml += '</tr>';
 
             // JIF 2024
             tableHtml += '<tr>';
