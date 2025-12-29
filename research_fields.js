@@ -30,7 +30,7 @@ const naturalScienceFields = {
                     'EMERGENCY', 'CRITICAL', 'INTENSIVE',
                     // 其他
                     'MEDICAL', 'HOSPITAL', 'PATIENT', 'THERAPY', 'TREATMENT',
-                    'AIDS', 'HIV', 'VIRUS', 'VIRAL',
+                    'AIDS', 'HIV', 'VIRUS', 'VIRAL', 'DRUG', 'THERANOSTICS',
                     // 著名医学期刊
                     'LANCET', 'NEW ENGLAND JOURNAL', 'JAMA', 'BMJ'],
         categories: ['医学', '药学', '护理学', '兽医学', '口腔医学']

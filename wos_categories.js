@@ -76,7 +76,7 @@ const WOSCategories = {
             'EMERGENCY', 'CRITICAL', 'INTENSIVE',
             'NURSING', 'CARE',
             'PUBLIC HEALTH', 'EPIDEMIOLOGY',
-            'PHARMACY', 'PHARMA', 'DRUG',
+            'PHARMACY', 'PHARMA', 'DRUG', 'THERANOSTICS',
             'REHABILITATION', 'THERAPY', 'TREATMENT',
             'DENTIST', 'DENTAL', 'TOOTH',
             'VETERINARY', 'VET', 'ANIMAL'
@@ -472,7 +472,8 @@ function getKeywordPriority(keyword) {
          'BRAIN', 'NEUROLOGY', 'NEUROSURGERY',
          'BLOOD', 'HEMATOLOGY',
          'BONE', 'ORTHOPEDIC', 'ORTHOPAEDIC',
-         'DIABETES', 'ARTHRITIS'].includes(keyword)) {
+         'DIABETES', 'ARTHRITIS',
+         'DRUG', 'THERANOSTICS'].includes(keyword)) {
         return 100;
     }
 

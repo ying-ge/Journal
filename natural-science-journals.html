@@ -197,6 +197,13 @@
             font-weight: 400;
             color: #2c3e50;
             margin-bottom: 8px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .journal-name:hover {
+            color: #74b9ff;
+            text-decoration: underline;
         }
 
         .journal-header {
@@ -590,6 +597,336 @@
             color: #5a6c7d;
         }
 
+        /* AI评价弹窗样式 */
+        .ai-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ai-modal.show {
+            display: flex;
+        }
+
+        .ai-modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ai-modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .ai-modal-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .ai-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #95a5a6;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .ai-modal-close:hover {
+            background: #f1f2f6;
+            color: #2c3e50;
+        }
+
+        .ai-modal-body {
+            padding: 24px;
+        }
+
+        .ai-loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #5a6c7d;
+        }
+
+        .ai-loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #74b9ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ai-response {
+            line-height: 1.8;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+
+        .ai-response p {
+            margin-bottom: 12px;
+        }
+
+        .ai-response strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .ai-modal-error {
+            background: #fff5f5;
+            border-left: 4px solid #e74c3c;
+            padding: 16px;
+            border-radius: 4px;
+            color: #c0392b;
+        }
+
+        /* 设置按钮样式 */
+        .settings-btn {
+            position: static;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            background: #74b9ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(116, 185, 255, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 12px;
+        }
+
+        .settings-btn:hover {
+            background: #5dade2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(116, 185, 255, 0.4);
+        }
+
+        .settings-btn.has-key {
+            background: #27ae60;
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+        }
+
+        .settings-btn.has-key:hover {
+            background: #229954;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+        }
+
+        .api-usage-tip {
+            background: #fff9e6;
+            border-left: 4px solid #f39c12;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #5a4a04;
+            line-height: 1.6;
+        }
+
+        .api-usage-tip strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        .api-usage-tip ol {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        .api-usage-tip li {
+            margin-bottom: 4px;
+        }
+
+        /* API Key设置弹窗样式 */
+        .api-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .api-modal.show {
+            display: flex;
+        }
+
+        .api-modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease;
+        }
+
+        .api-modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .api-modal-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .api-modal-body {
+            padding: 24px;
+        }
+
+        .api-input-group {
+            margin-bottom: 20px;
+        }
+
+        .api-input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .api-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .api-input:focus {
+            border-color: #74b9ff;
+            box-shadow: 0 0 0 3px rgba(116, 185, 255, 0.1);
+        }
+
+        .api-help {
+            font-size: 0.85rem;
+            color: #6c7a89;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .api-help a {
+            color: #74b9ff;
+            text-decoration: none;
+        }
+
+        .api-help a:hover {
+            text-decoration: underline;
+        }
+
+        .api-modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #eaeaea;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #74b9ff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5dade2;
+        }
+
+        .btn-secondary {
+            background: #f1f2f6;
+            color: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #ddd;
+        }
+
+        .api-status {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        .api-status.success {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-left: 4px solid #27ae60;
+        }
+
+        .api-status.info {
+            background: #d6eaf8;
+            color: #2980b9;
+            border-left: 4px solid #2980b9;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
@@ -619,6 +956,24 @@
             >
             <div class="search-tips">
                 💡 提示：支持期刊名称、首字母缩写（如 JACS）、缩写片段（如 "mol can" 搜 "Molecular Cancer"）、前缀等多种搜索方式，系统会自动匹配
+            </div>
+
+            <!-- API设置按钮和说明 -->
+            <button id="settingsBtn" class="settings-btn" onclick="openApiSettings()">
+                <span>⚙️</span>
+                <span id="settingsBtnText">设置API Key</span>
+            </button>
+
+            <div class="api-usage-tip" id="apiUsageTip">
+                <strong>🤖 AI期刊评价功能</strong>
+                <ol>
+                    <li>点击上方"设置API Key"按钮</li>
+                    <li>输入您的智谱AI API Key（<a href="https://open.bigmodel.cn/" target="_blank">获取地址</a>）</li>
+                    <li>保存后，点击任何<strong>期刊名称</strong>即可获得AI分析评价</li>
+                </ol>
+                <p style="margin: 8px 0 0 0; font-size: 0.82rem; color: #8a7d00;">
+                    🔒 您的API Key仅存储在浏览器本地，不会上传到服务器
+                </p>
             </div>
 
             <!-- 研究领域筛选器 -->
@@ -1021,6 +1376,14 @@
 
             resultsDiv.innerHTML = html;
             resultsDiv.classList.add('show');
+
+            // 为期刊名添加点击事件监听
+            document.querySelectorAll('.journal-name').forEach(journalName => {
+                journalName.addEventListener('click', function() {
+                    const journalNameText = this.textContent;
+                    showAiModal(journalNameText);
+                });
+            });
         }
 
         function performSearch(query) {
@@ -1500,6 +1863,61 @@
         </div>
     </div>
 
+    <!-- AI评价弹窗 -->
+    <div id="aiModal" class="ai-modal">
+        <div class="ai-modal-content">
+            <div class="ai-modal-header">
+                <h2 class="ai-modal-title" id="aiModalTitle">期刊AI评价</h2>
+                <button class="ai-modal-close" onclick="closeAiModal()">&times;</button>
+            </div>
+            <div class="ai-modal-body" id="aiModalBody">
+                <div class="ai-loading">
+                    <div class="ai-loading-spinner"></div>
+                    <p>正在分析期刊信息...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Key设置弹窗 -->
+    <div id="apiModal" class="api-modal">
+        <div class="api-modal-content">
+            <div class="api-modal-header">
+                <h2 class="api-modal-title">API设置</h2>
+                <button class="ai-modal-close" onclick="closeApiSettings()">&times;</button>
+            </div>
+            <div class="api-modal-body">
+                <div id="apiStatus" class="api-status info">
+                    请设置您的智谱AI GLM API Key以使用AI评价功能
+                </div>
+
+                <div class="api-input-group">
+                    <label class="api-input-label" for="apiKeyInput">API Key</label>
+                    <input
+                        type="password"
+                        id="apiKeyInput"
+                        class="api-input"
+                        placeholder="请输入您的智谱AI API Key"
+                    >
+                    <div class="api-help">
+                        <p><strong>如何获取API Key：</strong></p>
+                        <ol style="margin: 8px 0; padding-left: 20px;">
+                            <li>访问 <a href="https://open.bigmodel.cn/" target="_blank">智谱AI开放平台</a></li>
+                            <li>注册并登录账号</li>
+                            <li>进入"API Keys"页面</li>
+                            <li>创建新的API Key</li>
+                        </ol>
+                        <p style="margin-top: 8px;">您的API Key将安全保存在浏览器本地存储中，不会上传到服务器。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="api-modal-footer">
+                <button class="btn btn-secondary" onclick="closeApiSettings()">取消</button>
+                <button class="btn btn-primary" onclick="saveApiKey()">保存</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 选中的期刊集合
         const selectedJournals = new Set();
@@ -1572,6 +1990,247 @@
         // 关闭对比面板
         function closeCompareModal() {
             document.getElementById('compareModal').classList.remove('show');
+        }
+
+        // AI评价相关函数
+        function showAiModal(journalName) {
+            const modal = document.getElementById('aiModal');
+            const title = document.getElementById('aiModalTitle');
+            const body = document.getElementById('aiModalBody');
+
+            title.textContent = `期刊AI评价 - ${journalName}`;
+            body.innerHTML = `
+                <div class="ai-loading">
+                    <div class="ai-loading-spinner"></div>
+                    <p>正在分析期刊信息...</p>
+                </div>
+            `;
+
+            modal.classList.add('show');
+            getAiEvaluation(journalName);
+        }
+
+        function closeAiModal() {
+            document.getElementById('aiModal').classList.remove('show');
+        }
+
+        async function getAiEvaluation(journalName) {
+            const body = document.getElementById('aiModalBody');
+
+            try {
+                // 获取期刊指标数据
+                const jif = getJIFMetrics(journalName);
+                const sjr = getSJRMetrics(journalName);
+
+                // 构建期刊信息摘要
+                let journalInfo = `期刊名称：${journalName}\n`;
+                if (jif) {
+                    journalInfo += `影响因子(JIF 2024)：${jif.jif_2024 || 'N/A'}\n`;
+                    journalInfo += `5年影响因子：${jif.five_year_jif || 'N/A'}\n`;
+                    journalInfo += `JCI：${jif.jci || 'N/A'}\n`;
+                    journalInfo += `JIF分区：${jif.jif_quartile || 'N/A'}\n`;
+                    journalInfo += `JIF排名：${jif.jif_rank || 'N/A'}\n`;
+                    journalInfo += `出版社：${jif.publisher || 'N/A'}\n`;
+                }
+                if (sjr) {
+                    journalInfo += `SJR值：${sjr.sjr || 'N/A'}\n`;
+                    journalInfo += `SJR分区：${sjr.sjr_quartile || 'N/A'}\n`;
+                    journalInfo += `年发文量：${sjr.total_docs || 'N/A'}\n`;
+                    journalInfo += `版面费：$${sjr.apc_usd || 'N/A'}\n`;
+                }
+
+                // 构建提示词
+                const prompt = `你是一位经验丰富的学术期刊顾问。有研究者询问："${journalName}这个期刊怎么样？投这个期刊怎么样？"
+
+请基于以下期刊数据，给出直击痛点的实用建议：
+
+${journalInfo}
+
+请重点回答以下问题（用中文，简洁直接）：
+
+**一、期刊档次与水平**
+- 影响因子${jif?.jif_2024 || 'N/A'}在同类期刊中处于什么水平？值得投吗？
+- 分区${jif?.jif_quartile || 'N/A'}代表了什么学术地位？
+
+**二、审稿周期（非常重要！）**
+- 根据年发文量${sjr?.total_docs || 'N/A'}，推测审稿速度快慢？
+- 是"秒投秒拒"还是"漫长等待"？
+
+**三、国人发文占比**
+- ${jif?.publisher || '该出版社'}对国人友好吗？
+- 中国学者在这本期刊的发文占比大概多少？
+
+**四、口碑与争议**
+- 这本期刊在学术圈的口碑如何？
+- 有没有争议（如预警名单、灌水嫌疑等）？
+- ${jif?.jci || 'N/A'}的JCI值说明了什么质量问题？
+
+**五、性价比分析**
+- 版面费$${sjr?.apc_usd || 'N/A'}（约¥${Math.round((sjr?.apc_usd || 0) * 7.2)}）值得吗？
+- 综合考虑学术价值和费用，推荐度多少？
+
+**六、最终建议**
+- 用一句话总结：适不适合投？给个明确的"推荐/谨慎/不推荐"
+
+要求：
+1. 用大白话，不要官腔
+2. 数字说话，要有具体判断
+3. 有争议直接说，不要回避
+4. 最后给出明确的"推荐/谨慎/不推荐"结论`;
+
+                // 调用GLM-4.7 API
+                const response = await callGLM47API(prompt);
+
+                // 显示AI回复
+                body.innerHTML = `<div class="ai-response">${formatAIResponse(response)}</div>`;
+
+            } catch (error) {
+                console.error('AI评价失败:', error);
+                body.innerHTML = `
+                    <div class="ai-modal-error">
+                        <p><strong>获取AI评价失败</strong></p>
+                        <p>${error.message}</p>
+                        <p>请稍后重试或联系管理员。</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function callGLM47API(prompt) {
+            // 从localStorage获取API key
+            const apiKey = localStorage.getItem('glm_api_key');
+
+            if (!apiKey || apiKey.trim() === '') {
+                throw new Error('请先设置API Key（点击右下角⚙️设置按钮）');
+            }
+
+            const response = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey.trim()}`
+                },
+                body: JSON.stringify({
+                    model: 'glm-4-plus',
+                    messages: [
+                        {
+                            role: 'user',
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 2000
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                if (errorData.error && errorData.error.message) {
+                    throw new Error(`API错误: ${errorData.error.message}`);
+                }
+                throw new Error(`API调用失败: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+
+        // API Key设置相关函数
+        function openApiSettings() {
+            const modal = document.getElementById('apiModal');
+            const input = document.getElementById('apiKeyInput');
+            const status = document.getElementById('apiStatus');
+
+            // 加载已保存的API key
+            const savedKey = localStorage.getItem('glm_api_key');
+            if (savedKey) {
+                input.value = savedKey;
+                status.className = 'api-status success';
+                status.textContent = '✓ 已设置API Key';
+            } else {
+                input.value = '';
+                status.className = 'api-status info';
+                status.textContent = '请设置您的智谱AI GLM API Key以使用AI评价功能';
+            }
+
+            modal.classList.add('show');
+        }
+
+        function closeApiSettings() {
+            document.getElementById('apiModal').classList.remove('show');
+        }
+
+        function saveApiKey() {
+            const input = document.getElementById('apiKeyInput');
+            const status = document.getElementById('apiStatus');
+            const apiKey = input.value.trim();
+
+            if (!apiKey) {
+                status.className = 'api-status info';
+                status.textContent = '请输入API Key';
+                return;
+            }
+
+            // 保存到localStorage
+            localStorage.setItem('glm_api_key', apiKey);
+
+            status.className = 'api-status success';
+            status.textContent = '✓ API Key已保存';
+
+            // 更新设置按钮样式
+            updateSettingsButton();
+
+            // 隐藏使用提示
+            hideUsageTip();
+
+            // 1.5秒后自动关闭
+            setTimeout(() => {
+                closeApiSettings();
+            }, 1500);
+        }
+
+        function updateSettingsButton() {
+            const btn = document.getElementById('settingsBtn');
+            const btnText = document.getElementById('settingsBtnText');
+            const hasKey = localStorage.getItem('glm_api_key');
+
+            if (hasKey && hasKey.trim() !== '') {
+                btn.classList.add('has-key');
+                btn.title = 'API Key已设置，点击修改';
+                btnText.textContent = '✓ API已设置';
+            } else {
+                btn.classList.remove('has-key');
+                btn.title = '设置API Key';
+                btnText.textContent = '设置API Key';
+            }
+        }
+
+        function hideUsageTip() {
+            const tip = document.getElementById('apiUsageTip');
+            if (tip) {
+                tip.style.display = 'none';
+            }
+        }
+
+        // 页面加载时更新设置按钮状态
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSettingsButton();
+
+            // 如果已设置API Key，隐藏使用提示
+            const hasKey = localStorage.getItem('glm_api_key');
+            if (hasKey && hasKey.trim() !== '') {
+                hideUsageTip();
+            }
+        });
+
+        function formatAIResponse(text) {
+            // 简单的Markdown格式化
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>')
+                .replace(/^/, '<p>')
+                .replace(/$/, '</p>');
         }
 
         // 生成对比报告
@@ -1782,6 +2441,20 @@
         document.getElementById('compareModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeCompareModal();
+            }
+        });
+
+        // 点击AI评价模态框外部关闭
+        document.getElementById('aiModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAiModal();
+            }
+        });
+
+        // 点击API设置模态框外部关闭
+        document.getElementById('apiModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeApiSettings();
             }
         });
     </script>
