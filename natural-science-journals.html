@@ -196,6 +196,55 @@
             font-size: 0.8rem;
         }
 
+        .jif-metrics {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(17, 153, 142, 0.2);
+        }
+
+        .jif-main {
+            color: white;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .jif-main strong {
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .jif-details {
+            display: flex;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
+
+        .jif-extra {
+            display: flex;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
+
+        .jif-publisher {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.8rem;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
         .results-header {
             display: flex;
             justify-content: space-between;
@@ -351,9 +400,11 @@
         </div>
     <script src="journals.js"></script>
     <script src="sjr_metrics.js"></script>
+    <script src="jif_metrics.js"></script>
     <script>
         let dataLoaded = false;
         let sjrData = {};
+        // jifData 已在 jif_metrics.js 中定义，不需要重复声明
         const levelMap = {
             'nature、cell、science等国际顶级期刊评价目录': '顶级期刊',
             'SCIQ1区A类期刊评价目录': 'SCI Q1区A类',
@@ -380,10 +431,29 @@
             }
         }
 
+        // 加载 JIF 指标数据
+        function loadJIFData() {
+            try {
+                if (typeof jifData !== 'undefined') {
+                    console.log('JIF metrics loaded:', Object.keys(jifData).length, 'journals');
+                } else {
+                    console.log('JIF metrics not available');
+                }
+            } catch (error) {
+                console.error('Failed to load JIF data:', error);
+            }
+        }
+
         // 获取期刊的 SJR 指标
         function getSJRMetrics(journalName) {
             const upperName = journalName.toUpperCase();
             return sjrData[upperName] || null;
+        }
+
+        // 获取期刊的 JIF 指标
+        function getJIFMetrics(journalName) {
+            const upperName = journalName.toUpperCase();
+            return jifData[upperName] || null;
         }
 
         function loadJournals() {
@@ -559,15 +629,59 @@
             results.forEach(result => {
                 let extraInfo = '';
 
-                // 添加 SJR 指标
+                // 添加 JIF 指标（放在上面）
+                const jifMetrics = getJIFMetrics(result.name);
+                if (jifMetrics && (jifMetrics.jif_2024 || jifMetrics.five_year_jif)) {
+                    // 构建JIF详情
+                    let jifDetails = '';
+                    if (jifMetrics.jif_quartile) jifDetails += `<span>Q: ${jifMetrics.jif_quartile}</span>`;
+                    if (jifMetrics.jif_rank) jifDetails += `<span>Rank: ${jifMetrics.jif_rank}</span>`;
+                    if (jifMetrics.jci) jifDetails += `<span>JCI: ${jifMetrics.jci}</span>`;
+
+                    // 构建JIF附加信息
+                    let jifExtra = '';
+                    if (jifMetrics.jif_without_self_cites) {
+                        jifExtra += `<span>无自引JIF: ${jifMetrics.jif_without_self_cites}</span>`;
+                    }
+                    if (jifMetrics.total_cites) {
+                        jifExtra += `<span>总引用: ${Number(jifMetrics.total_cites).toLocaleString()}</span>`;
+                    }
+
+                    extraInfo += `<div class="jif-metrics">
+                        ${jifMetrics.jif_2024 ? `<div class="jif-main">📈 JIF (2024): <strong>${jifMetrics.jif_2024}</strong></div>` : ''}
+                        ${jifDetails ? `<div class="jif-details">${jifDetails}</div>` : ''}
+                        ${jifMetrics.five_year_jif ? `<div class="jif-details">
+                            <span>5-Year JIF: ${jifMetrics.five_year_jif}</span>
+                        </div>` : ''}
+                        ${jifExtra ? `<div class="jif-extra">${jifExtra}</div>` : ''}
+                        ${jifMetrics.publisher ? `<div class="jif-publisher">
+                            <span>🏢 ${jifMetrics.publisher}</span>
+                            ${jifMetrics.abbreviated_journal ? `<span>• ${jifMetrics.abbreviated_journal}</span>` : ''}
+                            ${jifMetrics.issn ? `<span>• ISSN: ${jifMetrics.issn}</span>` : ''}
+                        </div>` : ''}
+                    </div>`;
+                }
+
+                // 添加 SJR 指标（放在下面）
                 const sjrMetrics = getSJRMetrics(result.name);
                 if (sjrMetrics && sjrMetrics.sjr) {
+                    // 格式化 APC 显示
+                    let apcDisplay = '';
+                    if (sjrMetrics.apc_usd) {
+                        const apcValue = parseInt(sjrMetrics.apc_usd);
+                        if (apcValue === 0) {
+                            apcDisplay = '<span>💰 APC: FREE</span>';
+                        } else {
+                            apcDisplay = `<span>💰 APC: $${apcValue.toLocaleString()}</span>`;
+                        }
+                    }
+
                     extraInfo += `<div class="sjr-metrics">
                         <div class="sjr-main">📊 SJR: <strong>${sjrMetrics.sjr}</strong> <span class="sjr-quartile">${sjrMetrics.sjr_quartile}</span></div>
-                        <div class="sjr-details">
-                            <span>H-index: ${sjrMetrics.h_index}</span>
-                            <span>引用/文档: ${sjrMetrics.citations_per_doc}</span>
-                        </div>
+                        ${sjrMetrics.total_docs || apcDisplay ? `<div class="sjr-details">
+                            ${sjrMetrics.total_docs ? `<span>Total Docs. (2024): ${sjrMetrics.total_docs}</span>` : ''}
+                            ${apcDisplay}
+                        </div>` : ''}
                     </div>`;
                 }
 
@@ -739,10 +853,12 @@
             document.addEventListener('DOMContentLoaded', () => {
                 loadJournals();
                 loadSJRData();
+                loadJIFData();
             });
         } else {
             loadJournals();
             loadSJRData();
+            loadJIFData();
         }
     </script>
 </body>
