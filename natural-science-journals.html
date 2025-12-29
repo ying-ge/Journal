@@ -393,6 +393,27 @@
             background: #f8f9fa;
         }
 
+        /* 对比表格中的删除按钮样式 */
+        .remove-journal-btn {
+            background: #f8f9fa;
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 2px 8px;
+            line-height: 1;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-weight: bold;
+            min-width: 28px;
+        }
+
+        .remove-journal-btn:hover {
+            background: #e74c3c;
+            color: white;
+            transform: scale(1.1);
+        }
+
         .metric-value {
             color: #000000;
         }
@@ -3177,7 +3198,12 @@ ${journalInfo}
             tableHtml += '<thead><tr>';
             tableHtml += '<th>指标</th>';
             journalData.forEach(j => {
-                tableHtml += `<th><a href="javascript:void(0)" onclick="showAiModal('${j.name}')" style="color: #2c3e50; text-decoration: none; font-weight: 500;">${j.name}</a></th>`;
+                tableHtml += `<th>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                        <a href="javascript:void(0)" onclick="showAiModal('${j.name}')" style="color: #2c3e50; text-decoration: none; font-weight: 500;">${j.name}</a>
+                        <button onclick="removeJournalFromCompare('${j.name}')" class="remove-journal-btn" title="删除此期刊">×</button>
+                    </div>
+                </th>`;
             });
             tableHtml += '</tr></thead><tbody>';
 
@@ -3334,6 +3360,32 @@ ${journalInfo}
 
             tableHtml += '</tbody></table>';
             container.innerHTML = tableHtml;
+        }
+
+        // 从对比报告中删除期刊
+        function removeJournalFromCompare(journalName) {
+            // 从选中集合中删除
+            selectedJournals.delete(journalName);
+
+            // 更新复选框状态
+            const checkboxes = document.querySelectorAll('.journal-checkbox');
+            checkboxes.forEach(checkbox => {
+                const itemName = checkbox.getAttribute('data-name');
+                if (itemName === journalName) {
+                    checkbox.checked = false;
+                }
+            });
+
+            // 更新对比按钮状态
+            updateCompareButton();
+
+            // 如果没有期刊了，关闭对比报告
+            if (selectedJournals.size === 0) {
+                closeCompareModal();
+            } else {
+                // 重新生成对比报告
+                generateCompareReport();
+            }
         }
 
         // 点击模态框外部关闭
