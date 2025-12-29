@@ -7,13 +7,39 @@ const naturalScienceFields = {
     '医学与健康': {
         icon: '🏥',
         color: '#e74c3c',
-        keywords: ['MEDICINE', 'HEALTH', 'CLINICAL', 'PHARMACY', 'NURSING', 'DENTISTRY', 'VETERINARY'],
+        keywords: ['MEDICINE', 'HEALTH', 'CLINICAL', 'PHARMACY', 'NURSING', 'DENTISTRY', 'VETERINARY',
+                    // 疾病类型
+                    'CANCER', 'ONCOLOGY', 'LEUKEMIA', 'TUMOR', 'TUMOUR', 'DIABETES',
+                    'ARTHRITIS', 'PNEUMONIA', 'FRACTURE', 'DISEASE',
+                    // 器官系统
+                    'HEART', 'CARDIO', 'CARDIOVASCULAR', 'KIDNEY', 'RENAL',
+                    'NEPHROLOGY', 'LIVER', 'HEPATIC', 'HEPATOLOGY',
+                    'LUNG', 'PULMONARY', 'PULMONOLOGY', 'RESPIRATORY',
+                    'BRAIN', 'NEUROLOGY', 'NEURAL', 'NEUROSURGERY',
+                    'BONE', 'ORTHOPEDIC', 'ORTHOPAEDIC',
+                    'BLOOD', 'HEMATOLOGY',
+                    'SKIN', 'DERMATOLOGY',
+                    'EYE', 'OPHTHALMOLOGY',
+                    'EAR', 'OTOLARYNGOLOGY',
+                    'STOMACH', 'GASTRO', 'GASTROENTEROLOGY',
+                    'BLADDER', 'UROLOGY',
+                    // 医学科
+                    'SURGERY', 'SURGICAL', 'PATHOLOGY', 'RADIOLOGY',
+                    'PEDIATRICS', 'GERIATRICS', 'PSYCHIATRY',
+                    'GYNECOLOGY', 'OBSTETRICS', 'ANESTHESIA',
+                    'EMERGENCY', 'CRITICAL', 'INTENSIVE',
+                    // 其他
+                    'MEDICAL', 'HOSPITAL', 'PATIENT', 'THERAPY', 'TREATMENT',
+                    'AIDS', 'HIV', 'VIRUS', 'VIRAL',
+                    // 著名医学期刊
+                    'LANCET', 'NEW ENGLAND JOURNAL', 'JAMA', 'BMJ'],
         categories: ['医学', '药学', '护理学', '兽医学', '口腔医学']
     },
     '生物学与生命科学': {
         icon: '🧬',
         color: '#27ae60',
-        keywords: ['BIOLOGY', 'LIFE', 'GENETICS', 'MOLECULAR', 'CELL', 'BIOTECHNOLOGY', 'BIOMEDICAL'],
+        keywords: ['BIOLOGY', 'LIFE', 'GENETICS', 'MOLECULAR', 'CELL', 'BIOTECHNOLOGY', 'BIOMEDICAL',
+                    'VIROLOGY', 'VIRUS', 'VIRAL', 'MICROBIOLOGY', 'IMMUNOLOGY', 'BIOCHEMISTRY'],
         categories: ['生物学', '生态学', '生物技术', '遗传学']
     },
     '化学与材料科学': {
@@ -65,7 +91,7 @@ const socialScienceFields = {
     '艺术与设计': {
         icon: '🎨',
         color: '#d35400',
-        keywords: ['ART', 'DESIGN', 'MUSIC', 'ARCHITECTURE', 'FILM', 'LITERATURE'],
+        keywords: ['ARTS', 'DESIGN', 'MUSIC', 'ARCHITECTURE', 'FILM', 'LITERATURE', 'FINE ART'],
         categories: ['艺术', '设计', '音乐', '建筑']
     }
 };
@@ -77,40 +103,13 @@ const researchFields = {
 };
 
 /**
- * 根据期刊名称推断研究领域
+ * 根据期刊名称推断研究领域（基于Web of Science学科分类）
  * @param {string} journalName - 期刊名称
+ * @param {string} type - 期刊类型：'natural'（自然科学）或 'social'（人文社科），默认为 'natural'
  * @returns {string} 研究领域
  */
-function guessResearchField(journalName) {
-    if (!journalName) return '未分类';
-
-    const nameUpper = journalName.toUpperCase();
-
-    // 检查每个研究领域的关键词
-    for (const [fieldName, fieldData] of Object.entries(researchFields)) {
-        for (const keyword of fieldData.keywords) {
-            if (nameUpper.includes(keyword)) {
-                return fieldName;
-            }
-        }
-    }
-
-    // 检查缩写
-    const abbreviations = {
-        'JAM': '医学与健康',
-        'JBC': '生物学与生命科学',
-        'JACS': '化学与材料科学',
-        'PRL': '物理学与天文学',
-        'IEEE': '工程与技术'
-    };
-
-    for (const [abbr, field] of Object.entries(abbreviations)) {
-        if (nameUpper.includes(abbr)) {
-            return field;
-        }
-    }
-
-    return '其他';
+function guessResearchField(journalName, type = 'natural') {
+    return guessResearchFieldByWoS(journalName, type);
 }
 
 /**
@@ -144,11 +143,20 @@ function getAllResearchFields() {
  * @returns {array} 自然科学领域数组
  */
 function getNaturalScienceFields() {
-    return Object.keys(naturalScienceFields).map(name => ({
+    const fields = Object.keys(naturalScienceFields).map(name => ({
         name: name,
         icon: naturalScienceFields[name].icon,
         color: naturalScienceFields[name].color
     }));
+
+    // 添加"其他"分类
+    fields.push({
+        name: '其他',
+        icon: '📁',
+        color: '#95a5a6'
+    });
+
+    return fields;
 }
 
 /**
@@ -156,11 +164,20 @@ function getNaturalScienceFields() {
  * @returns {array} 人文社科领域数组
  */
 function getSocialScienceFields() {
-    return Object.keys(socialScienceFields).map(name => ({
+    const fields = Object.keys(socialScienceFields).map(name => ({
         name: name,
         icon: socialScienceFields[name].icon,
         color: socialScienceFields[name].color
     }));
+
+    // 添加"其他"分类
+    fields.push({
+        name: '其他',
+        icon: '📁',
+        color: '#95a5a6'
+    });
+
+    return fields;
 }
 
 /**
