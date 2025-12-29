@@ -14,7 +14,20 @@
       "WebSearch",
       "mcp__web-reader__webReader",
       "Bash(python3:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(sjr_metrics_full_all.js )",
+      "Bash(sjr_metrics_full.json )",
+      "Bash(sjr_metrics.json )",
+      "Bash(test_jif.html )",
+      "Bash(process_scimago_csv.py )",
+      "Bash(build_sjr_database.py )",
+      "Bash(download_sjr_data.py )",
+      "Bash(download_full_sjr.py )",
+      "Bash(SJR_INTEGRATION.md )",
+      "Bash(SJR_STATUS.md )",
+      "Bash(IMPLEMENTATION_SUMMARY.md)",
+      "Bash(__NEW_LINE__ echo \"✓ 已删除以下文件:\")",
+      "Bash(awk '{print $9, \"\"\"\"(\"\"\"\"$5\"\"\"\")\"\"\"\"}')"
     ],
     "deny": [],
     "ask": []
