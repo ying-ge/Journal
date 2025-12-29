@@ -127,6 +127,199 @@
             margin-bottom: 8px;
         }
 
+        .journal-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .journal-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* 对比按钮 */
+        .compare-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .compare-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .compare-button.show {
+            display: flex;
+        }
+
+        .compare-count {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        /* 按钮组容器 */
+        .compare-actions {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .clear-button {
+            background: linear-gradient(135deg, #fab1a0 0%, #e17055 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(250, 177, 160, 0.4);
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(250, 177, 160, 0.5);
+        }
+
+        .clear-button.show {
+            display: flex;
+        }
+
+        /* 对比面板 */
+        .compare-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .compare-modal.show {
+            display: block;
+        }
+
+        .compare-content {
+            background: white;
+            max-width: 1200px;
+            margin: 40px auto;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .compare-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eaeaea;
+        }
+
+        .compare-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .compare-close {
+            background: #fab1a0;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .compare-close:hover {
+            background: #e17055;
+        }
+
+        /* 对比表格 */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .compare-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+            position: sticky;
+            top: 0;
+        }
+
+        .compare-table th:first-child {
+            background: #74b9ff;
+            color: white;
+            width: 200px;
+        }
+
+        .compare-table td:first-child {
+            font-weight: 600;
+            color: #2c3e50;
+            background: #f8f9fa;
+        }
+
+        .metric-value {
+            color: #2c3e50;
+        }
+
+        .metric-value.highlight {
+            color: #00b894;
+            font-weight: 600;
+        }
+
+        .metric-value.jif {
+            color: #00b894;
+            font-weight: 600;
+        }
+
+        .metric-value.sjr {
+            color: #6c5ce7;
+            font-weight: 600;
+        }
+
         .journal-level {
             display: inline-block;
             padding: 5px 12px;
@@ -730,8 +923,11 @@
                 }
 
                 html += `
-                    <div class="result-item">
-                        <div class="journal-name">${result.name}</div>
+                    <div class="result-item" data-journal-name="${result.name}">
+                        <div class="journal-header">
+                            <input type="checkbox" class="journal-checkbox" data-journal="${result.name}" onchange="toggleJournalSelection('${result.name}')">
+                            <div class="journal-name">${result.name}</div>
+                        </div>
                         <div>
                             <span class="journal-level">${result.level}</span>
                         </div>
@@ -879,6 +1075,269 @@
             loadSJRData();
             loadJIFData();
         }
+    </script>
+
+    <!-- 对比操作按钮组 -->
+    <div class="compare-actions">
+        <!-- 对比按钮 -->
+        <button id="compareButton" class="compare-button" onclick="showCompareModal()">
+            <span>📊 对比</span>
+            <span id="compareCount" class="compare-count">0</span>
+        </button>
+
+        <!-- 清空按钮 -->
+        <button id="clearButton" class="clear-button" onclick="clearSelectedJournals()">
+            <span>🗑️ 清空</span>
+            <span id="clearCount" class="compare-count">0</span>
+        </button>
+    </div>
+
+    <!-- 对比面板 -->
+    <div id="compareModal" class="compare-modal">
+        <div class="compare-content">
+            <div class="compare-header">
+                <h2 class="compare-title">期刊对比报告</h2>
+                <button class="compare-close" onclick="closeCompareModal()">关闭</button>
+            </div>
+            <div id="compareTableContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // 选中的期刊集合
+        const selectedJournals = new Set();
+
+        // 切换期刊选择状态
+        function toggleJournalSelection(journalName) {
+            if (selectedJournals.has(journalName)) {
+                selectedJournals.delete(journalName);
+            } else {
+                selectedJournals.add(journalName);
+            }
+            updateCompareButton();
+        }
+
+        // 更新对比按钮状态
+        function updateCompareButton() {
+            const compareButton = document.getElementById('compareButton');
+            const clearButton = document.getElementById('clearButton');
+            const compareCount = document.getElementById('compareCount');
+            const clearCount = document.getElementById('clearCount');
+
+            if (selectedJournals.size >= 2) {
+                compareButton.classList.add('show');
+                compareCount.textContent = selectedJournals.size;
+            } else {
+                compareButton.classList.remove('show');
+            }
+
+            if (selectedJournals.size >= 1) {
+                clearButton.classList.add('show');
+                clearCount.textContent = selectedJournals.size;
+            } else {
+                clearButton.classList.remove('show');
+            }
+        }
+
+        // 清空选中的期刊
+        function clearSelectedJournals() {
+            if (selectedJournals.size === 0) {
+                return;
+            }
+
+            // 确认对话框
+            if (confirm(`确定要清空已选择的 ${selectedJournals.size} 个期刊吗？`)) {
+                // 清空选中集合
+                selectedJournals.clear();
+
+                // 取消所有复选框的选中状态
+                document.querySelectorAll('.journal-checkbox').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+
+                // 更新按钮状态
+                updateCompareButton();
+
+                console.log('✅ 已清空所有选中的期刊');
+            }
+        }
+
+        // 显示对比面板
+        function showCompareModal() {
+            if (selectedJournals.size < 2) {
+                alert('请至少选择2个期刊进行对比');
+                return;
+            }
+            generateCompareReport();
+            document.getElementById('compareModal').classList.add('show');
+        }
+
+        // 关闭对比面板
+        function closeCompareModal() {
+            document.getElementById('compareModal').classList.remove('show');
+        }
+
+        // 生成对比报告
+        function generateCompareReport() {
+            const container = document.getElementById('compareTableContainer');
+            const journals = Array.from(selectedJournals);
+
+            // 获取每个期刊的详细数据
+            const journalData = journals.map(name => {
+                return {
+                    name: name,
+                    jif: getJIFMetrics(name),
+                    sjr: getSJRMetrics(name)
+                };
+            });
+
+            // 生成表格HTML
+            let tableHtml = '<table class="compare-table">';
+
+            // 表头
+            tableHtml += '<thead><tr>';
+            tableHtml += '<th>指标</th>';
+            journalData.forEach(j => {
+                tableHtml += `<th>${j.name}</th>`;
+            });
+            tableHtml += '</tr></thead><tbody>';
+
+            // JIF 2024
+            tableHtml += '<tr>';
+            tableHtml += '<td>📈 JIF (2024)</td>';
+            journalData.forEach(j => {
+                const value = j.jif?.jif_2024 || 'N/A';
+                tableHtml += `<td class="metric-value jif">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // 5-Year JIF
+            tableHtml += '<tr>';
+            tableHtml += '<td>📊 5-Year JIF</td>';
+            journalData.forEach(j => {
+                const value = j.jif?.five_year_jif || 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // JCI
+            tableHtml += '<tr>';
+            tableHtml += '<td>🎯 JCI</td>';
+            journalData.forEach(j => {
+                const value = j.jif?.jci || 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // JIF Quartile
+            tableHtml += '<tr>';
+            tableHtml += '<td>🏆 JIF Quartile</td>';
+            journalData.forEach(j => {
+                const value = j.jif?.jif_quartile || 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // JIF Rank
+            tableHtml += '<tr>';
+            tableHtml += '<td>📊 JIF Rank</td>';
+            journalData.forEach(j => {
+                const value = j.jif?.jif_rank || 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // 无自引JIF
+            tableHtml += '<tr>';
+            tableHtml += '<td>✨ 无自引JIF</td>';
+            journalData.forEach(j => {
+                const value = j.jif?.jif_without_self_cites || 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // 总引用
+            tableHtml += '<tr>';
+            tableHtml += '<td>📚 总引用</td>';
+            journalData.forEach(j => {
+                const value = j.jif?.total_cites ? Number(j.jif.total_cites).toLocaleString() : 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // Publisher
+            tableHtml += '<tr>';
+            tableHtml += '<td>🏢 Publisher</td>';
+            journalData.forEach(j => {
+                const value = j.jif?.publisher || 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // SJR
+            tableHtml += '<tr>';
+            tableHtml += '<td>📈 SJR</td>';
+            journalData.forEach(j => {
+                const value = j.sjr?.sjr || 'N/A';
+                tableHtml += `<td class="metric-value sjr">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // SJR Quartile
+            tableHtml += '<tr>';
+            tableHtml += '<td>🏆 SJR Quartile</td>';
+            journalData.forEach(j => {
+                const value = j.sjr?.sjr_quartile || 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // Total Docs
+            tableHtml += '<tr>';
+            tableHtml += '<td>📄 Total Docs (2024)</td>';
+            journalData.forEach(j => {
+                const value = j.sjr?.total_docs || 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // APC
+            tableHtml += '<tr>';
+            tableHtml += '<td>💰 APC (USD)</td>';
+            journalData.forEach(j => {
+                const value = j.sjr?.apc_usd ? `$${Number(j.sjr.apc_usd).toLocaleString()}` : 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // ISSN
+            tableHtml += '<tr>';
+            tableHtml += '<td>📋 ISSN</td>';
+            journalData.forEach(j => {
+                const value = j.jif?.issn || 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            // 期刊缩写
+            tableHtml += '<tr>';
+            tableHtml += '<td>📝 期刊缩写</td>';
+            journalData.forEach(j => {
+                const value = j.jif?.abbreviated_journal || 'N/A';
+                tableHtml += `<td class="metric-value">${value}</td>`;
+            });
+            tableHtml += '</tr>';
+
+            tableHtml += '</tbody></table>';
+            container.innerHTML = tableHtml;
+        }
+
+        // 点击模态框外部关闭
+        document.getElementById('compareModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCompareModal();
+            }
+        });
     </script>
 </body>
 </html>
