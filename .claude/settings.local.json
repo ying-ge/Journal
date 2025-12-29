@@ -27,7 +27,9 @@
       "Bash(SJR_STATUS.md )",
       "Bash(IMPLEMENTATION_SUMMARY.md)",
       "Bash(__NEW_LINE__ echo \"✓ 已删除以下文件:\")",
-      "Bash(awk '{print $9, \"\"\"\"(\"\"\"\"$5\"\"\"\")\"\"\"\"}')"
+      "Bash(awk '{print $9, \"\"\"\"(\"\"\"\"$5\"\"\"\")\"\"\"\"}')",
+      "Bash(curl:*)",
+      "Bash(open:*)"
     ],
     "deny": [],
     "ask": []

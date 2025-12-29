@@ -175,3 +175,119 @@ function isJournalInField(journalName, field) {
     const journalField = guessResearchField(journalName);
     return journalField === field;
 }
+
+// ==================== 水平分类筛选 ====================
+
+// 水平分类配置
+const levelCategories = {
+    '国际顶级期刊': {
+        icon: '🌟',
+        color: '#f39c12',
+        description: 'Nature、Cell、Science等国际顶级期刊',
+        key: 'nature、cell、science等国际顶级期刊评价目录'
+    },
+    'SCI Q1区A类': {
+        icon: '🥇',
+        color: '#e74c3c',
+        description: 'SCI Q1区A类期刊',
+        key: 'SCIQ1区A类期刊评价目录'
+    },
+    'SCI Q1区B类': {
+        icon: '🥈',
+        color: '#e67e22',
+        description: 'SCI Q1区B类期刊',
+        key: 'SCIQ1区B类期刊评价目录'
+    },
+    'SCI Q1区C类': {
+        icon: '🥉',
+        color: '#d35400',
+        description: 'SCI Q1区C类期刊',
+        key: 'SCIQ1区C类期刊评价目录'
+    },
+    'SCI Q1区D类': {
+        icon: '🏅',
+        color: '#c0392b',
+        description: 'SCI Q1区D类期刊',
+        key: 'SCIQ1区D类期刊评价目录'
+    },
+    'SCI Q2区': {
+        icon: '📊',
+        color: '#3498db',
+        description: 'SCI Q2区期刊',
+        key: 'SCIQ2区期刊评价目录'
+    },
+    'SCI Q3区': {
+        icon: '📈',
+        color: '#1abc9c',
+        description: 'SCI Q3区期刊',
+        key: 'SCIQ3区期刊评价目录'
+    },
+    '卓越行动计划': {
+        icon: '🎯',
+        color: '#9b59b6',
+        description: '中国科技期刊卓越行动计划入选期刊',
+        key: '中国科技期刊卓越行动计划入选期刊目录'
+    },
+    '高起点新刊': {
+        icon: '🚀',
+        color: '#16a085',
+        description: '高起点新刊项目',
+        key: '高起点新刊项目'
+    }
+};
+
+/**
+ * 获取所有水平分类列表
+ * @returns {array} 水平分类数组
+ */
+function getAllLevelCategories() {
+    return Object.keys(levelCategories).map(name => ({
+        name: name,
+        icon: levelCategories[name].icon,
+        color: levelCategories[name].color,
+        key: levelCategories[name].key
+    }));
+}
+
+/**
+ * 获取水平分类的显示信息
+ * @param {string} levelName - 水平分类名称
+ * @returns {object} 包含图标、颜色等信息
+ */
+function getLevelCategoryInfo(levelName) {
+    return levelCategories[levelName] || {
+        icon: '📁',
+        color: '#95a5a6',
+        description: '',
+        key: ''
+    };
+}
+
+/**
+ * 根据期刊名称获取所属的水平分类键
+ * @param {string} journalName - 期刊名称
+ * @param {object} journalsData - 期刊数据对象
+ * @returns {string|null} 水平分类键
+ */
+function getJournalLevelKey(journalName, journalsData) {
+    if (!journalsData) return null;
+
+    for (const [levelKey, journals] of Object.entries(journalsData)) {
+        const found = journals.some(j => j.name === journalName);
+        if (found) return levelKey;
+    }
+
+    return null;
+}
+
+/**
+ * 根据水平分类键获取分类名称
+ * @param {string} levelKey - 水平分类键
+ * @returns {string} 水平分类名称
+ */
+function getLevelNameByKey(levelKey) {
+    for (const [name, info] of Object.entries(levelCategories)) {
+        if (info.key === levelKey) return name;
+    }
+    return '未分类';
+}
